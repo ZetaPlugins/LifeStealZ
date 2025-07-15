@@ -5,6 +5,7 @@ api-version: '1.19'
 author: Kartoffelchips
 website: https://lsz.strassburger.dev/
 description: LifeStealZ - The Ultimate LifeSteal SMP Plugin!
+folia-supported: true
 
 softdepend:
     - PlaceholderAPI

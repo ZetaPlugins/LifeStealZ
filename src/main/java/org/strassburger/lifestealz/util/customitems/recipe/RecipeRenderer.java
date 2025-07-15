@@ -1,6 +1,9 @@
 package org.strassburger.lifestealz.util.customitems.recipe;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -9,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.strassburger.lifestealz.LifeStealZ;
 import org.strassburger.lifestealz.util.GuiManager;
 import org.strassburger.lifestealz.util.MessageUtils;
+import org.strassburger.lifestealz.util.SchedulerUtils;
 import org.strassburger.lifestealz.util.customitems.CustomItem;
 import org.strassburger.lifestealz.util.customitems.CustomItemManager;
 
@@ -17,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 final class RecipeRenderer {
     private final LifeStealZ plugin;
-    private final Map<Inventory, List<Integer>> animationMap = new HashMap<>();
+    private final Map<Inventory, List<SchedulerUtils.UniversalTask>> animationMap = new HashMap<>();
 
     public RecipeRenderer(LifeStealZ plugin) {
         this.plugin = plugin;
@@ -25,29 +29,31 @@ final class RecipeRenderer {
 
     /**
      * Saves that an animation was started in an inventory to stop them when the inventory is closed
+     *
      * @param inventory The inventory to save the animation for
-     * @param taskId The task id of the animation
+     * @param taskId    The task id of the animation
      */
-    private void addAnimation(Inventory inventory, int taskId) {
-        if (animationMap.containsKey(inventory)) animationMap.get(inventory).add(taskId);
-        else animationMap.put(inventory, new ArrayList<>(Collections.singletonList(taskId)));
+    private void addAnimation(Inventory inventory, SchedulerUtils.UniversalTask task) {
+        if (animationMap.containsKey(inventory)) animationMap.get(inventory).add(task);
+        else animationMap.put(inventory, new ArrayList<>(Collections.singletonList(task)));
     }
 
     /**
      * Cancels all animations for an inventory
+     *
      * @param inventory The inventory to cancel the animations for
      */
     public void cancelAnimations(Inventory inventory) {
         if (animationMap.containsKey(inventory)) {
-            for (int taskId : animationMap.get(inventory)) {
-                Bukkit.getScheduler().cancelTask(taskId);
+            for (SchedulerUtils.UniversalTask task : animationMap.get(inventory)) {
+                task.cancel();
             }
-            animationMap.remove(inventory);
         }
     }
 
     /**
      * Renders the recipe for a custom item
+     *
      * @param player The player to render the recipe for
      * @param itemId The id of the item to render the recipe for
      */
@@ -88,8 +94,9 @@ final class RecipeRenderer {
 
     /**
      * Renders the recipe for a custom item
-     * @param player The player to render the recipe for
-     * @param itemId The id of the item to render the recipe for
+     *
+     * @param player   The player to render the recipe for
+     * @param itemId   The id of the item to render the recipe for
      * @param recipeId The recipe id of the recipe to render
      */
     public void renderRecipe(Player player, String itemId, String recipeId) {
@@ -147,7 +154,7 @@ final class RecipeRenderer {
                 .makeForbidden()
                 .getItemStack();
 
-        List<Integer> glassSlots = Arrays.asList(0,1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,22,23,25,26,27,31,32,33,34,35,36,37,38,39,41,42,43,44);
+        List<Integer> glassSlots = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 22, 23, 25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 42, 43, 44);
         for (int slot : glassSlots) {
             inventory.setItem(slot, glass);
         }
@@ -161,7 +168,7 @@ final class RecipeRenderer {
         renderIngredient(inventory, 28, rowThree.get(0));
         renderIngredient(inventory, 29, rowThree.get(1));
         renderIngredient(inventory, 30, rowThree.get(2));
-        inventory.setItem(24,new CustomItem(CustomItemManager.createCustomItem(itemId)).makeForbidden().getItemStack());
+        inventory.setItem(24, new CustomItem(CustomItemManager.createCustomItem(itemId)).makeForbidden().getItemStack());
 
         GuiManager.RECIPE_GUI_MAP.put(player.getUniqueId(), inventory);
         player.openInventory(inventory);
@@ -210,16 +217,16 @@ final class RecipeRenderer {
             index.set((currentIndex + 1) % materialList.size());
         };
 
-        int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, runnable, 0L, 20L);
+        SchedulerUtils.UniversalTask task = SchedulerUtils.scheduleSyncRepeatingTask(plugin, runnable, 0L, 20L);
+        if (task.isCancelled()) return;
 
-        if (taskId == -1) return;
-
-        addAnimation(inventory, taskId);
+        addAnimation(inventory, task);
 
         // Cancel the task after 30 seconds
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            Bukkit.getScheduler().cancelTask(taskId);
-            if (inventory != null) inventory.setItem(slot, new CustomItem(materialList.get(0)).makeForbidden().getItemStack());
+        SchedulerUtils.scheduleSyncDelayedTask(plugin, () -> {
+            task.cancel();
+            if (inventory != null)
+                inventory.setItem(slot, new CustomItem(materialList.get(0)).makeForbidden().getItemStack());
         }, 20 * 30);
     }
 

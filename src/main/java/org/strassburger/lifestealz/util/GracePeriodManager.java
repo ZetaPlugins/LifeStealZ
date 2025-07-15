@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.strassburger.lifestealz.LifeStealZ;
 import org.strassburger.lifestealz.storage.PlayerData;
 
@@ -28,6 +27,7 @@ public final class GracePeriodManager {
 
     /**
      * Checks if the player is in the grace period.
+     *
      * @param player The player to check.
      * @return True if the player is in the grace period, false otherwise.
      */
@@ -47,6 +47,7 @@ public final class GracePeriodManager {
 
     /**
      * Gets the remaining time of the grace period in seconds.
+     *
      * @param player The player to get the grace period remaining time for.
      * @return The remaining time of the grace period in seconds.
      */
@@ -68,29 +69,27 @@ public final class GracePeriodManager {
 
     /**
      * Sends the player a message and executes commands when the grace period starts.
+     *
      * @param player The player to start the grace period for.
      */
     public void startGracePeriod(Player player) {
         if (!isEnabled()) return;
 
         for (String command : getConfig().getStartCommands()) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
-                    command.replace("&player&", player.getName()));
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command.replace("&player&", player.getName()));
         }
 
         // Duration in ticks: 20 ticks = 1 second
         final long gracePeriodDuration = (long) getConfig().getDuration() * 20;
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                endGracePeriod(player);
-            }
-        }.runTaskLater(plugin, gracePeriodDuration);
+        SchedulerUtils.runTaskLater(plugin, () -> {
+            endGracePeriod(player);
+        }, gracePeriodDuration);
     }
 
     /**
      * Sends the player a message and executes commands when the grace period ends.
+     *
      * @param player The player to end the grace period for.
      */
     public void endGracePeriod(Player player) {
@@ -117,6 +116,7 @@ public final class GracePeriodManager {
 
     /**
      * Skips the grace period for the player.
+     *
      * @param player The player to skip the grace period for.
      * @return True if the grace period was skipped, false otherwise.
      */
@@ -140,6 +140,7 @@ public final class GracePeriodManager {
 
     /**
      * Resets the grace period for the player.
+     *
      * @param player The player to reset the grace period for.
      * @return True if the grace period was reset, false otherwise.
      */
@@ -153,8 +154,7 @@ public final class GracePeriodManager {
         plugin.getStorage().save(playerData);
 
         for (String command : getConfig().getStartCommands()) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
-                    command.replace("&player&", player.getName()));
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command.replace("&player&", player.getName()));
         }
 
         return true;

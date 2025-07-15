@@ -5,6 +5,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.strassburger.lifestealz.LifeStealZ;
 import org.strassburger.lifestealz.commands.SubCommand;
 import org.strassburger.lifestealz.util.MessageUtils;
+import org.strassburger.lifestealz.util.SchedulerUtils;
 import org.strassburger.lifestealz.util.commands.CommandUtils;
 import org.strassburger.lifestealz.storage.Storage;
 
@@ -50,7 +51,7 @@ public final class DataSubCommand implements SubCommand {
                 "exportingData",
                 "&7Exporting player data..."
         ));
-        BukkitTask task = plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        SchedulerUtils.UniversalTask task = SchedulerUtils.runTaskAsynchronously(plugin, () -> {
             String filePath = storage.export(fileName);
             if (filePath != null) {
                 sender.sendMessage(MessageUtils.getAndFormatMsg(
@@ -77,7 +78,7 @@ public final class DataSubCommand implements SubCommand {
                 "importingData",
                 "&7Importing player data..."
         ));
-        BukkitTask task = plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        SchedulerUtils.UniversalTask task =SchedulerUtils.runTaskAsynchronously(plugin, () -> {
             storage.importData(fileName);
             sender.sendMessage(MessageUtils.getAndFormatMsg(
                     true,
