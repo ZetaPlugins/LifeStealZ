@@ -6,7 +6,6 @@ import com.zetaplugins.lifestealz.util.GracePeriodManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.WebHookManager;
 import com.zetaplugins.lifestealz.events.*;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -72,7 +71,6 @@ public final class PlayerDeathListener implements Listener {
         double healthPerNaturalDeath = plugin.getConfig().getInt("heartsPerNaturalDeath") * 2;
         double healthToLoose = isDeathByPlayer ? healthPerKill : healthPerNaturalDeath;
 
-        // Handle grace period restrictions first
         boolean victimInGracePeriod = restrictedHeartLossByGracePeriod(player);
         boolean killerInGracePeriod = isDeathByPlayer && restrictedHeartGainByGracePeriod(killer);
 
@@ -82,36 +80,25 @@ public final class PlayerDeathListener implements Listener {
             Bukkit.getPluginManager().callEvent(graceEvent);
 
             if (!graceEvent.isCancelled()) {
-                if (victimInGracePeriod) {
-                    player.sendMessage(graceEvent.getMessageToVictim());
-                }
-                if (killerInGracePeriod && killer != null) {
-                    killer.sendMessage(graceEvent.getMessageToKiller());
-                }
-
-                // If victim is in grace period, stop processing
-                if (victimInGracePeriod) return;
+                if (victimInGracePeriod) player.sendMessage(graceEvent.getMessageToVictim());
+                if (killerInGracePeriod && killer != null) killer.sendMessage(graceEvent.getMessageToKiller());
+                if (victimInGracePeriod) return; // Only victim in grace fully blocks heart loss
             }
         }
 
-        // Handle killer-specific logic (heart gain, cooldowns, max hearts)
+        boolean preventKillerGain = false;
         if (isDeathByPlayer && !killerInGracePeriod) {
-            // Check heart gain cooldown
-            if (handleHeartGainCooldown(event, player, killer, healthToLoose)) return;
-
-            // Check max hearts limit
-            if (handleMaxHeartsLimit(event, player, killer, healthToLoose)) return;
+            if (handleHeartGainCooldown(event, player, killer, healthToLoose)) preventKillerGain = true;
+            if (handleMaxHeartsLimit(event, player, killer, healthToLoose)) preventKillerGain = true;
         }
 
-        // Check for elimination
         if (playerData.getMaxHealth() - healthToLoose <= minHearts) {
             handleElimination(event, player, playerData, killer, isDeathByPlayer);
             return;
         }
 
-        // Handle normal death (not elimination)
         if (isDeathByPlayer) {
-            handlePvPDeath(event, player, killer, playerData, healthToLoose);
+            handlePvPDeath(event, player, killer, playerData, healthToLoose, preventKillerGain);
         } else {
             handleNaturalDeath(event, player, playerData, healthToLoose);
         }
@@ -166,30 +153,31 @@ public final class PlayerDeathListener implements Listener {
         return false;
     }
 
-    private void handlePvPDeath(PlayerDeathEvent event, Player player, Player killer, PlayerData playerData, double healthToLoose) {
-        double healthGain = healthToLoose; // Killer gains what victim loses
+    private void handlePvPDeath(PlayerDeathEvent event, Player player, Player killer, PlayerData playerData, double healthToLoose, boolean preventKillerGain) {
+        double healthGain = healthToLoose;
 
-        ZPlayerPvPDeathEvent pvpEvent =
-                new ZPlayerPvPDeathEvent(event, killer, healthToLoose, healthGain);
+        ZPlayerPvPDeathEvent pvpEvent = new ZPlayerPvPDeathEvent(event, killer, healthToLoose, healthGain);
         pvpEvent.setShouldDropHearts(plugin.getConfig().getBoolean("dropHeartsPlayer"));
+
+        pvpEvent.setKillerShouldGainHearts(!preventKillerGain);
+
         Bukkit.getPluginManager().callEvent(pvpEvent);
 
         if (!pvpEvent.isCancelled()) {
-            // Apply heart loss to victim
+            // Victim loses hearts (always if > 0)
             if (pvpEvent.getHeartsToLose() > 0) {
                 playerData.setMaxHealth(playerData.getMaxHealth() - pvpEvent.getHeartsToLose());
                 plugin.getStorage().save(playerData);
                 LifeStealZ.setMaxHealth(player, playerData.getMaxHealth());
             }
 
-            // Handle killer heart gain or drops
+            // Killer gain or drops
             if (pvpEvent.isShouldDropHearts()) {
                 dropHeartsNaturally(player.getLocation(), (int) (pvpEvent.getHeartsToLose() / 2), CustomItemManager.createKillHeart());
             } else if (pvpEvent.isKillerShouldGainHearts() && pvpEvent.getHeartsKillerGains() > 0) {
                 handleKillerHeartGainDirect(killer, pvpEvent.getHeartsKillerGains());
             }
 
-            // Update death message if changed
             if (!pvpEvent.getDeathMessage().equals(event.getDeathMessage())) {
                 event.setDeathMessage(pvpEvent.getDeathMessage());
             }
