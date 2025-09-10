@@ -87,9 +87,21 @@ public final class PlayerDeathListener implements Listener {
         }
 
         boolean preventKillerGain = false;
+        boolean droppedAtKiller = false;
+
         if (isDeathByPlayer && !killerInGracePeriod) {
-            if (handleHeartGainCooldown(event, player, killer, healthToLoose)) preventKillerGain = true;
-            if (handleMaxHeartsLimit(event, player, killer, healthToLoose)) preventKillerGain = true;
+            if (handleHeartGainCooldown(event, player, killer, healthToLoose)) {
+                preventKillerGain = true;
+                if (plugin.getConfig().getBoolean("heartGainCooldown.dropOnCooldown")) {
+                    droppedAtKiller = true;
+                }
+            }
+            if (handleMaxHeartsLimit(event, player, killer, healthToLoose)) {
+                preventKillerGain = true;
+                if (plugin.getConfig().getBoolean("dropHeartsIfMax")) {
+                    droppedAtKiller = true;
+                }
+            }
         }
 
         if (playerData.getMaxHealth() - healthToLoose <= minHearts) {
@@ -98,7 +110,7 @@ public final class PlayerDeathListener implements Listener {
         }
 
         if (isDeathByPlayer) {
-            handlePvPDeath(event, player, killer, playerData, healthToLoose, preventKillerGain);
+            handlePvPDeath(event, player, killer, playerData, healthToLoose, preventKillerGain, droppedAtKiller);
         } else {
             handleNaturalDeath(event, player, playerData, healthToLoose);
         }
@@ -153,18 +165,20 @@ public final class PlayerDeathListener implements Listener {
         return false;
     }
 
-    private void handlePvPDeath(PlayerDeathEvent event, Player player, Player killer, PlayerData playerData, double healthToLoose, boolean preventKillerGain) {
+    private void handlePvPDeath(PlayerDeathEvent event, Player player, Player killer, PlayerData playerData, double healthToLoose, boolean preventKillerGain, boolean droppedAtKiller) {
         double healthGain = healthToLoose;
 
         ZPlayerPvPDeathEvent pvpEvent = new ZPlayerPvPDeathEvent(event, killer, healthToLoose, healthGain);
-        pvpEvent.setShouldDropHearts(plugin.getConfig().getBoolean("dropHeartsPlayer"));
+
+        boolean shouldDropFromPvP = plugin.getConfig().getBoolean("dropHeartsPlayer") && !droppedAtKiller;
+        pvpEvent.setShouldDropHearts(shouldDropFromPvP);
 
         pvpEvent.setKillerShouldGainHearts(!preventKillerGain);
 
         Bukkit.getPluginManager().callEvent(pvpEvent);
 
         if (!pvpEvent.isCancelled()) {
-            // Victim loses hearts (always if > 0)
+            // Victim loses hearts
             if (pvpEvent.getHeartsToLose() > 0) {
                 playerData.setMaxHealth(playerData.getMaxHealth() - pvpEvent.getHeartsToLose());
                 plugin.getStorage().save(playerData);
