@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import com.zetaplugins.lifestealz.LifeStealZ;
@@ -26,6 +27,8 @@ public final class ReviveBeaconEffectManager {
     private final Map<Location, Set<BlockDisplay>> lasers;
     private final Map<Location, BukkitTask> laserGrowTasks;
     private final Map<Location, BlockDisplay> decoyDisplays;
+    private final Map<Location, BukkitTask> bossbarTasks;
+    private final Map<Location, BossBar> bossBars;
 
     public ReviveBeaconEffectManager(LifeStealZ plugin) {
         this.plugin = plugin;
@@ -34,6 +37,8 @@ public final class ReviveBeaconEffectManager {
         this.lasers = new HashMap<>();
         this.laserGrowTasks = new HashMap<>();
         this.decoyDisplays = new HashMap<>();
+        this.bossbarTasks = new HashMap<>();
+        this.bossBars = new HashMap<>();
     }
 
     /**
@@ -82,8 +87,6 @@ public final class ReviveBeaconEffectManager {
                 final Location center = location.clone().add(0.5, 1.0, 0.5);
 
                 public void run() {
-                    //spawnVerticalParticleBeam(center);
-
                     spawnRing(center, particleColor);
                 }
             }.runTaskTimer(plugin, 0L, 10L);
@@ -91,32 +94,45 @@ public final class ReviveBeaconEffectManager {
             revivingParticleBeacons.put(getKey(location), runnable);
         }
 
-        // Check config value
-        if (!plugin.getConfig().getBoolean("showBossbar")) return;
+        if (plugin.getConfig().getBoolean("showBossbar")) startBossbarTask(location, target, reviveTime);
+    }
 
-        // Create Bossbar
+    /**
+     * Starts a bossbar task for a Revive Beacon at the specified location.
+     * @param location The location of the Revive Beacon where the bossbar will be shown.
+     * @param target The name of the Player who is being revived.
+     * @param reviveTime The total time in seconds for the revival process.
+     */
+    private void startBossbarTask(Location location, String target, int reviveTime) {
+        if (bossbarTasks.containsKey(getKey(location))) return;
+
         int countdown = reviveTime;
-        BossBar bossBar = Bukkit.createBossBar("", parseBarColor(plugin.getConfig().getString("bossbarColor").toUpperCase(), BarColor.RED), parseBarStyle(plugin.getConfig().getString("bossbarStyle").toUpperCase(), BarStyle.SOLID));
+        BossBar bossBar = Bukkit.createBossBar(
+                "",
+                parseBossbarColor(plugin.getConfig().getString("bossbarColor"), BarColor.RED),
+                parseBossbarStyle(plugin.getConfig().getString("bossbarStyle"), BarStyle.SOLID)
+        );
         bossBar.setVisible(true);
 
-        new BukkitRunnable() {
+        bossBars.put(getKey(location), bossBar);
+
+        BukkitTask bossbarTask = new BukkitRunnable() {
             int timeleft = countdown;
 
             public void run() {
                 if (timeleft <= 0){
                     bossBar.setVisible(false);
                     bossBar.removeAll();
-                    cancel();
+                    bossBars.remove(getKey(location));
+                    this.cancel();
                     return;
                 }
 
-                // Calculate Time
                 int days = timeleft / 86400;
                 int hours = (timeleft % 86400) / 3600;
                 int minutes = (timeleft & 3600) / 60;
                 int seconds = timeleft % 60;
 
-                // Format to two digits
                 String hFormatted = String.format("%02d", hours);
                 String mFormatted = String.format("%02d", minutes);
                 String sFormatted = String.format("%02d", seconds);
@@ -127,7 +143,6 @@ public final class ReviveBeaconEffectManager {
                     bossBar.addPlayer(p);
                 }
 
-                // Refresh progress bar progress
                 bossBar.setProgress((double) timeleft / countdown);
 
                 String title = plugin.getLanguageManager().getString("reviveBossbarTitle")
@@ -144,6 +159,29 @@ public final class ReviveBeaconEffectManager {
                 timeleft--;
             }
         }.runTaskTimer(plugin, 0L, 20L);
+
+        bossbarTasks.put(getKey(location), bossbarTask);
+    }
+
+    /**
+     * Stops the bossbar task for a Revive Beacon at the specified location.
+     * @param location The location of the Revive Beacon where the bossbar task will be stopped.
+     */
+    public void stopBossbarTask(Location location) {
+        BukkitTask task = bossbarTasks.remove(getKey(location));
+        if (task != null) task.cancel();
+    }
+
+    /**
+     * Removes the bossbar at the specified location.
+     * @param location The location of the Revive Beacon where the bossbar will be removed.
+     */
+    public void removeBossbar(Location location) {
+        BossBar bossBar = bossBars.remove(getKey(location));
+        if (bossBar != null) {
+            bossBar.setVisible(false);
+            bossBar.removeAll();
+        }
     }
 
     /**
@@ -205,24 +243,6 @@ public final class ReviveBeaconEffectManager {
                 ));
             }
         }.runTaskTimer(plugin, 0L, tickInterval);
-    }
-
-    /**
-     * Spawns a vertical particle beam at the specified center location.
-     * This method is typically called during the reviving process of a player.
-     * @param center The center location where the vertical particle beam will be spawned.
-     */
-    private void spawnVerticalParticleBeam(Location center) {
-        final int height = 15;
-        for (double y = 0; y < height; y += 0.5) {
-            center.getWorld().spawnParticle(
-                    Particle.DUST,
-                    center.clone().add(0, y, 0),
-                    1,
-                    0.0, 0.0, 0.0,
-                    new Particle.DustOptions(ParticleColor.RED.getColor(), 1.5f)
-            );
-        }
     }
 
     /**
@@ -398,6 +418,8 @@ public final class ReviveBeaconEffectManager {
         stopRevivingParticles(location);
         removeLaser(location);
         removeDecoy(location);
+        stopBossbarTask(location);
+        removeBossbar(location);
     }
 
     /**
@@ -418,8 +440,22 @@ public final class ReviveBeaconEffectManager {
         laserGrowTasks.clear();
         for (BlockDisplay display : decoyDisplays.values()) if (display != null) display.remove();
         decoyDisplays.clear();
+        for (BukkitTask task : bossbarTasks.values()) task.cancel();
+        bossbarTasks.clear();
+        for (BossBar bossBar : bossBars.values()) {
+            if (bossBar != null) {
+                bossBar.setVisible(false);
+                bossBar.removeAll();
+            }
+        }
+        bossBars.clear();
     }
 
+    /**
+     * Generates a key for the given location, ignoring the pitch and yaw.
+     * @param location The location to generate a key for.
+     * @return A new Location object with the same world and block coordinates, but with pitch and yaw set to 0.
+     */
     private Location getKey(Location location) {
         return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
@@ -430,9 +466,13 @@ public final class ReviveBeaconEffectManager {
      * @param fallbackColor the color to return if the string is invalid
      * @return the parsed color, or the fallback color if the string is invalid
      */
-    private BarColor parseBarColor(String color, BarColor fallbackColor) {
-        BarColor barColor = BarColor.valueOf(color.toUpperCase());
-        return barColor != null ? barColor : fallbackColor;
+    private BarColor parseBossbarColor(@Nullable String color, BarColor fallbackColor) {
+        try {
+            if (color == null) return fallbackColor;
+            return BarColor.valueOf(color.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return fallbackColor;
+        }
     }
 
     /**
@@ -441,8 +481,12 @@ public final class ReviveBeaconEffectManager {
      * @param fallbackStyle the style to return if the string is invalid
      * @return the parsed style, or the fallback style if the string is invalid
      */
-    private BarStyle parseBarStyle(String style, BarStyle fallbackStyle) {
-        BarStyle barStyle = BarStyle.valueOf(style.toUpperCase());
-        return barStyle != null ? barStyle : fallbackStyle;
+    private BarStyle parseBossbarStyle(@Nullable String style, BarStyle fallbackStyle) {
+        try {
+            if (style == null) return fallbackStyle;
+            return BarStyle.valueOf(style.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return fallbackStyle;
+        }
     }
 }
