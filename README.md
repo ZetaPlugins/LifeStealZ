@@ -213,6 +213,22 @@ reviveuseCommands:
 reviveStartCommands:
 # - "broadcast &player& started reviving &target& at &location&"
 
+
+# Whether a custom Bossbar should appear when the revival process starts.
+showBossbar: false
+
+# The Title of the Bossbar
+# Placeholders: &target&, &remainingD&, &remainingH&, &remainingM&, &remainingS&, &location&, &locationX&, &locationY&, &locationZ&
+# Can be found in your lang file under "reviveBossbarTitle"
+
+# The Color of the Bossbar itself.
+# Available Options: BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW
+bossbarColor: RED
+
+# The Style of the Bossbar.
+# Available Options: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20
+bossbarStyle: SOLID
+
 gracePeriod:
   # If a grace period should be enabled
   enabled: false
