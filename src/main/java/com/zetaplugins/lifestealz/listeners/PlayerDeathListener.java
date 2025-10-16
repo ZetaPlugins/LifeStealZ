@@ -71,6 +71,41 @@ public final class PlayerDeathListener implements Listener {
         double healthPerNaturalDeath = plugin.getConfig().getInt("heartsPerNaturalDeath") * 2;
         double healthToLoose = isDeathByPlayer ? healthPerKill : healthPerNaturalDeath;
 
+        // Bypass permission short-circuit (takes precedence over grace period)
+        boolean bypassEnabled = plugin.getConfig().getBoolean("bypassPermission.enabled");
+        boolean victimHasBypass = bypassEnabled && player.hasPermission(plugin.getConfig().getString("bypassPermission.node", "lifestealz.bypass"));
+
+        if (victimHasBypass) {
+            // Fire bypass event for observability and messaging
+            net.kyori.adventure.text.Component victimMsg = com.zetaplugins.lifestealz.util.MessageUtils.getAndFormatMsg(
+                    false,
+                    "bypassVictim",
+                    "&aYour hearts are protected; you didn’t lose any on death.");
+            net.kyori.adventure.text.Component killerMsg = net.kyori.adventure.text.Component.text("");
+            if (isDeathByPlayer) {
+                killerMsg = com.zetaplugins.lifestealz.util.MessageUtils.getAndFormatMsg(
+                        false,
+                        "bypassKiller",
+                        "&e%player% had bypass active; you didn’t gain a heart.",
+                        new com.zetaplugins.lifestealz.util.MessageUtils.Replaceable("%player%", player.getName())
+                );
+            }
+            com.zetaplugins.lifestealz.events.death.ZPlayerHeartLossBypassEvent bypassEvent =
+                    new com.zetaplugins.lifestealz.events.death.ZPlayerHeartLossBypassEvent(event, killer, victimMsg, killerMsg);
+            org.bukkit.Bukkit.getPluginManager().callEvent(bypassEvent);
+
+            // Respect notify toggle and config messages.enabled
+            boolean messagesEnabled = plugin.getConfig().getBoolean("bypassPermission.messages.enabled", true);
+            if (bypassEvent.isNotifyMessages() && messagesEnabled) {
+                player.sendMessage(bypassEvent.getMessageToVictim());
+                if (isDeathByPlayer && killer != null) killer.sendMessage(bypassEvent.getMessageToKiller());
+            }
+
+            // Do not allow elimination when bypass is active if configured
+            // Entire heart loss and killer reward/drops are skipped by returning early
+            return;
+        }
+
         boolean victimInGracePeriod = restrictedHeartLossByGracePeriod(player);
         boolean killerInGracePeriod = isDeathByPlayer && restrictedHeartGainByGracePeriod(killer);
 

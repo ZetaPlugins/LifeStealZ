@@ -79,4 +79,16 @@ public interface LifeStealZAPI {
      * @return The custom item ID of the item.
      */
     String getCustomItemID(ItemStack item);
+
+    /**
+     * Returns whether the bypass permission is active for the player.
+     * When active, deaths will not cause heart loss, heart drops, or killer rewards.
+     */
+    boolean isBypassActive(org.bukkit.entity.Player player);
+
+    /**
+     * Returns whether the bypass should apply for a death of this victim.
+     * This reflects the final policy including config toggles.
+     */
+    boolean shouldBypassForDeath(org.bukkit.entity.Player victim);
 }
