@@ -95,3 +95,5 @@ beaconInUseInteract: "&7已有一个复活过程正在进行中。剩余时间�
 alreadyRevivingPlayer: "&c此玩家已被另一个信标复活！请等待当前复活完成"
 noReviveBeaconBreak: "&c你不能破坏正在被使用的复活信标！"
 noItemUseInWorld: "&c你不能在这个世界中使用该物品！"
+bypassVictim: "&a你的心已被保护；你在死亡时没有失去任何心。"
+bypassKiller: "&e%player% 启用了绕过；你没有获得心。"

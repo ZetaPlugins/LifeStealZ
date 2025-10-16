@@ -91,3 +91,5 @@ beaconInUseInteract: "&7既に復活プロセスが進行中です。残り時�
 alreadyRevivingPlayer: "&cこのプレイヤーは既に別のビーコンで復活中です！復活完了までお待ちください。"
 noReviveBeaconBreak: "&c使用中の復活ビーコンは壊せません！"
 noItemUseInWorld: "&cこのワールドではこのアイテムを使用できません！"
+bypassVictim: "&aあなたのハートは保護されています。死亡しても失いませんでした。"
+bypassKiller: "&e%player% はバイパスが有効でした。ハートは得られません。"

@@ -94,3 +94,5 @@ noHeartGainFromPlayersInGracePeriod: "&cVous ne pouvez pas perdre de cœurs pend
   la période de grâce!"
 noHeartLossInGracePeriod: "&cVous ne pouvez pas perdre de cœurs pendant la période
   de grâce!"
+bypassVictim: "&aVos coeurs sont protégés; vous n’avez rien perdu en mourant."
+bypassKiller: "&e%player% avait le bypass actif; vous n’avez gagné aucun coeur."

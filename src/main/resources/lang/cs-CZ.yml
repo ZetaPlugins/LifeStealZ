@@ -95,3 +95,5 @@ beaconInUseInteract: "&7Oživovací proces již probíhá. Zbývající čas: &c
 alreadyRevivingPlayer: "&cTento hráč je již oživován jiným majákem! Počkejte, než bude proces dokončen."
 noReviveBeaconBreak: "&cNemůžete zničit oživovací maják během jeho použití!"
 noItemUseInWorld: "&cTento předmět nemůžete v tomto světě použít!"
+bypassVictim: "&aVaše srdce jsou chráněna; při smrti jste o žádná nepřišli."
+bypassKiller: "&e%player% měl aktivní bypass; nezískali jste žádné srdce."

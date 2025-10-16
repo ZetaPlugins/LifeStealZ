@@ -56,3 +56,5 @@ unwhitelistedWorld: |2
   Thế giới này không nằm trong danh sách trắng. LSZ sẽ không kích hoạt ở đây.</gray>
 
   <red><u><click:open_url:'https://lsz.strassburger.dev/configuration/whitelist'>Tài liệu</click></u></red> <red><u><click:open_url :'https://strassburger.org/discord'>Hỗ trợ Discord</click></u></red> <u><hover:show_text:'<gray>Để bỏ qua: Đặt 'supressWhitelistMessage' thành <b> true</b> trong tệp cấu hình.</gray>'><red>Ẩn tin nhắn</red></hover></u>
+bypassVictim: "&aTrái tim của bạn được bảo vệ; bạn không mất trái tim khi chết."
+bypassKiller: "&e%player% đang bật bypass; bạn không nhận được trái tim."
