@@ -66,6 +66,7 @@ LifeStealZ offers a great amount of admin tools and is highly customizable. You 
 - **lifestealz.admin.eliminate** - Allows to eliminate players with the `/eliminate` command
 - **lifestealz.admin.revive** - Allow a player to revive another player with the `/revive` command
 - **lifestealz.bypassrevivelimit** - Allow a player to bypass the revive limit
+- **lifestealz.bypass** - Prevent heart loss/drops/rewards on death (default: false)
 - **lifestealz.withdraw** - Allow a player to withdraw hearts (true by default)
 - **lifestealz.revive** - Allow a player to revive others with a revive crystal (true by default)
 - **lifestealz.viewrecipes** - Allow a player to view the custom recipes (true by default)
@@ -228,6 +229,14 @@ bossbarColor: RED
 # The Style of the Bossbar.
 # Available Options: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20
 bossbarStyle: SOLID
+
+# Permission-based bypass (optional)
+bypassPermission:
+  enabled: true
+  node: "lifestealz.bypass"
+  blockElimination: true
+  messages:
+    enabled: true
 
 gracePeriod:
   # If a grace period should be enabled
