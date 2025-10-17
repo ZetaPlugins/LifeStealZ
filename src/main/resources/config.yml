@@ -172,24 +172,20 @@ gracePeriod:
   endCommands:
     # - "say The grace period for &player& has ended"
 
-# === BYPASS PERMISSION ===
 # This section enables a permission-based bypass similar to the grace period.
-# When active for a player, they will NOT:
-#  - lose hearts on death (PvP or natural)
-#  - drop heart items on death
-#  - grant killer heart rewards
-# Optionally prevents elimination while active.
 bypassPermission:
   # If the bypass permission feature should be enabled
   enabled: true
-  # The permission node that activates the bypass
-  node: "lifestealz.bypass"
-  # Prevent elimination while bypass is active (player won't reach 0 hearts from deaths)
-  blockElimination: true
-  # Control whether messages are sent to victim and killer when a death is bypassed
-  # Actual message content is configured in your lang files (see keys: bypassVictim, bypassKiller)
-  messages:
-    enabled: true
+  # Should a player be able to take damage from players with bypass permission
+  damageFromPlayers: false
+  # Should a player be able to deal damage to players with bypass permission
+  damageToPlayers: false
+  # Should a player be able to use hearts with bypass permission
+  useHearts: false
+  # Should a player be able to lose hearts with bypass permission (if set to false, the killer will also not gain a heart)
+  looseHearts: false
+  # Should a player be able to gain hearts with bypass permission
+  gainHearts: false
 
 heartGainCooldown:
   # A cooldown for how often people can gain a heart.

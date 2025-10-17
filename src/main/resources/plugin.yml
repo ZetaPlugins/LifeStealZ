@@ -79,3 +79,6 @@ permissions:
     lifestealz.bypass:
         description: Prevents heart loss, drops, and killer rewards on death
         default: false
+    lifestealz.bypass.check:
+        description: Check other players' and your own bypass status
+        default: op
