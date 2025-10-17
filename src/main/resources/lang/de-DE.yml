@@ -91,5 +91,3 @@ beaconInUseInteract: "&7Es ist bereits ein Wiederbelebungsprozess im Gange. Verb
 alreadyRevivingPlayer: "&cDieser Spieler wird bereits von einem anderen Block wiederbelebt! Bitte warte, bis die aktuelle Wiederbelebung abgeschlossen ist."
 noReviveBeaconBreak: "&cDu kannst einen Wiederbelebungsblock nicht zerstören, während er in Benutzung ist!"
 noItemUseInWorld: "&cDu kannst diesen Gegenstand in dieser Welt nicht benutzen!"
-bypassVictim: "&aDeine Herzen sind geschützt; du hast beim Tod keine verloren."
-bypassKiller: "&e%player% hatte Bypass aktiv; du hast kein Herz erhalten."

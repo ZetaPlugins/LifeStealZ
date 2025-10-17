@@ -109,5 +109,3 @@ failedToUploadDebugReport: "&cHet uploaden van het debugrapport is mislukt. Prob
   het later opnieuw."
 errorWhileGeneratingDebugReport: "&cEr is een fout opgetreden tijdens het genereren
   van het debugrapport."
-bypassVictim: "&aJe hartjes zijn beschermd; je bent geen hartjes kwijtgeraakt."
-bypassKiller: "&e%player% had bypass actief; je hebt geen hartje gekregen."

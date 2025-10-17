@@ -126,5 +126,3 @@ alreadyRevivingPlayer: "&cEzt a játékost már egy másik jeladó éleszti újr
   várjon, amíg a jelenlegi újraélesztés befejeződik."
 noReviveBeaconBreak: "&c Használat közben nem törheted el az újraélesztő jelzőt!"
 noItemUseInWorld: "&cEzt a tárgyat nem használhatod ebben a világban!"
-bypassVictim: "&aA szíveid védettek; halálkor nem veszítettél egyet sem."
-bypassKiller: "&e%player% bypass védelemmel rendelkezett; nem kaptál szívet."

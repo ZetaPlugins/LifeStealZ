@@ -62,5 +62,3 @@ webhookEliminationColor: ea3323
 webhookReviveTitle: Ożywiono Gracza
 webhookRevive: Gracz **%player%** został ożywiony przez **%reviver%**!
 webhookReviveColor: b094ee
-bypassVictim: "&aTwoje serca są chronione; nie straciłeś żadnych po śmierci."
-bypassKiller: "&e%player% miał aktywny bypass; nie otrzymałeś serca."

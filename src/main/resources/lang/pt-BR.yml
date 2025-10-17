@@ -91,5 +91,3 @@ beaconInUseInteract: "&7Já há um processo de revive em andamento. Tempo restan
 alreadyRevivingPlayer: "&cEste jogador já está sendo revivido por outro beacon! Aguarde até o revive atual terminar."
 noReviveBeaconBreak: "&cVocê não pode quebrar um beacon de reviver enquanto ele está em uso!"
 noItemUseInWorld: "&cVocê não pode usar este item neste mundo!"
-bypassVictim: "&aSeus corações estão protegidos; você não perdeu nenhum ao morrer."
-bypassKiller: "&e%player% estava com bypass ativo; você não ganhou um coração."
