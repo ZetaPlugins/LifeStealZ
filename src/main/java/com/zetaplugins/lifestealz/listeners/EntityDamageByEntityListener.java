@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.zetaplugins.lifestealz.LifeStealZ;
+import com.zetaplugins.lifestealz.util.BypassManager;
 import com.zetaplugins.lifestealz.util.GracePeriodManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 
@@ -29,6 +30,28 @@ public final class EntityDamageByEntityListener implements Listener {
         if (damagedEntity instanceof Player && damagerEntity instanceof Player) {
             Player damagedPlayer = (Player) damagedEntity;
             Player damagerPlayer = (Player) damagerEntity;
+
+            BypassManager bypassManager = plugin.getBypassManager();
+
+            if (bypassManager.hasBypass(damagedPlayer) && !bypassManager.getConfig().damageFromPlayers()) {
+                event.setCancelled(true);
+                damagerPlayer.sendMessage(MessageUtils.getAndFormatMsg(
+                        false,
+                        "noDamageWithBypass",
+                        "&cYou can't damage players with bypass permission!"
+                ));
+                return;
+            }
+
+            if (bypassManager.hasBypass(damagerPlayer) && !bypassManager.getConfig().damageToPlayers()) {
+                event.setCancelled(true);
+                damagerPlayer.sendMessage(MessageUtils.getAndFormatMsg(
+                        false,
+                        "noDamageWithBypass",
+                        "&cYou can't damage players with bypass permission!"
+                ));
+                return;
+            }
 
             GracePeriodManager gracePeriodManager = plugin.getGracePeriodManager();
 

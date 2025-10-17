@@ -66,6 +66,8 @@ LifeStealZ offers a great amount of admin tools and is highly customizable. You 
 - **lifestealz.admin.eliminate** - Allows to eliminate players with the `/eliminate` command
 - **lifestealz.admin.revive** - Allow a player to revive another player with the `/revive` command
 - **lifestealz.bypassrevivelimit** - Allow a player to bypass the revive limit
+- **lifestealz.bypass** - Prevent heart loss/drops/rewards on death (default: false)
+- **lifestealz.bypass.check** - Check bypass status for yourself and other players (default: op)
 - **lifestealz.withdraw** - Allow a player to withdraw hearts (true by default)
 - **lifestealz.revive** - Allow a player to revive others with a revive crystal (true by default)
 - **lifestealz.viewrecipes** - Allow a player to view the custom recipes (true by default)
@@ -257,6 +259,21 @@ gracePeriod:
   # Custom commands to be executed when the grace period ends
   endCommands:
     # - "say The grace period for &player& has ended"
+
+# This section enables a permission-based bypass similar to the grace period.
+bypassPermission:
+  # If the bypass permission feature should be enabled
+  enabled: true
+  # Should a player be able to take damage from players with bypass permission
+  damageFromPlayers: false
+  # Should a player be able to deal damage to players with bypass permission
+  damageToPlayers: false
+  # Should a player be able to use hearts with bypass permission
+  useHearts: false
+  # Should a player be able to lose hearts with bypass permission (if set to false, the killer will also not gain a heart)
+  looseHearts: false
+  # Should a player be able to gain hearts with bypass permission
+  gainHearts: false
 
 heartGainCooldown:
   # A cooldown for how often people can gain a heart.

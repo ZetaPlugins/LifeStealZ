@@ -97,6 +97,9 @@ public final class PapiExpansion extends PlaceholderExpansion {
                         gracePeriodManager.getGracePeriodRemaining(player.getPlayer()).orElse(0)
                 );
             }
+            case "hasBypass": {
+                return String.valueOf(plugin.getBypassManager().hasBypass(player.getPlayer()));
+            }
             case "heartCooldown": {
                 long heartCooldownTime = plugin.getConfig().getLong("heartCooldown");
                 final long now = System.currentTimeMillis();

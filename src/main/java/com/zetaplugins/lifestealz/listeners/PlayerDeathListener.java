@@ -1,6 +1,7 @@
 package com.zetaplugins.lifestealz.listeners;
 
 import com.zetaplugins.lifestealz.events.death.*;
+import com.zetaplugins.lifestealz.util.BypassManager;
 import com.zetaplugins.lifestealz.util.CooldownManager;
 import com.zetaplugins.lifestealz.util.GracePeriodManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
@@ -71,6 +72,23 @@ public final class PlayerDeathListener implements Listener {
         double healthPerNaturalDeath = plugin.getConfig().getInt("heartsPerNaturalDeath") * 2;
         double healthToLoose = isDeathByPlayer ? healthPerKill : healthPerNaturalDeath;
 
+        // Check bypass first (takes priority over grace period)
+        boolean victimHasBypass = restrictedHeartLossByBypass(player);
+        boolean killerHasBypass = isDeathByPlayer && killer != null && restrictedHeartGainByBypass(killer);
+
+        if (victimHasBypass || killerHasBypass) {
+            ZPlayerBypassDeathEvent bypassEvent = 
+                    new ZPlayerBypassDeathEvent(event, killer, victimHasBypass, killerHasBypass);
+            Bukkit.getPluginManager().callEvent(bypassEvent);
+
+            if (!bypassEvent.isCancelled()) {
+                if (victimHasBypass) player.sendMessage(bypassEvent.getMessageToVictim());
+                if (killerHasBypass && killer != null) killer.sendMessage(bypassEvent.getMessageToKiller());
+                if (victimHasBypass) return; // Only victim with bypass fully blocks heart loss
+            }
+        }
+
+        // Check grace period (only if bypass doesn't apply)
         boolean victimInGracePeriod = restrictedHeartLossByGracePeriod(player);
         boolean killerInGracePeriod = isDeathByPlayer && restrictedHeartGainByGracePeriod(killer);
 
@@ -86,10 +104,12 @@ public final class PlayerDeathListener implements Listener {
             }
         }
 
+
         boolean preventKillerGain = false;
         boolean droppedAtKiller = false;
 
-        if (isDeathByPlayer && !killerInGracePeriod) {
+        if (isDeathByPlayer && !killerInGracePeriod && !killerHasBypass) {
+            
             if (handleHeartGainCooldown(event, player, killer, healthToLoose)) {
                 preventKillerGain = true;
                 if (plugin.getConfig().getBoolean("heartGainCooldown.dropOnCooldown")) {
@@ -355,5 +375,15 @@ public final class PlayerDeathListener implements Listener {
     private boolean restrictedHeartGainByGracePeriod(Player player) {
         GracePeriodManager gracePeriodManager = plugin.getGracePeriodManager();
         return gracePeriodManager.isInGracePeriod(player) && !gracePeriodManager.getConfig().gainHearts();
+    }
+
+    private boolean restrictedHeartLossByBypass(Player player) {
+        BypassManager bypassManager = plugin.getBypassManager();
+        return bypassManager.hasBypass(player) && !bypassManager.getConfig().looseHearts();
+    }
+
+    private boolean restrictedHeartGainByBypass(Player player) {
+        BypassManager bypassManager = plugin.getBypassManager();
+        return bypassManager.hasBypass(player) && !bypassManager.getConfig().gainHearts();
     }
 }

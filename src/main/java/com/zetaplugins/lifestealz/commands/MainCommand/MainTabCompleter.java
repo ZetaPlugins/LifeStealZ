@@ -42,6 +42,7 @@ public final class MainTabCompleter implements TabCompleter {
         if (sender.hasPermission("lifestealz.help")) options.add("help");
         if (sender.hasPermission("lifestealz.managedata")) options.add("data");
         if (sender.hasPermission("lifestealz.graceperiod")) options.add("graceperiod");
+        if (sender.hasPermission("lifestealz.bypass.check")) options.add("checkbypass");
 
         return getDisplayOptions(options, input);
     }
