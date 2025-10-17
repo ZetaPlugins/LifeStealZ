@@ -154,9 +154,9 @@ dropHeartsNatural: true
 # If a heart should be dropped, when the killer already has the max amount of hearts
 dropHeartsIfMax: true
 # If a player should lose a heart, when dying to hostile mobs or falldamage, lava, etc
-looseHeartsToNature: true
+loseHeartsToNature: true
 # If a player should lose a heart, when being killed by another player
-looseHeartsToPlayer: true
+loseHeartsToPlayer: true
 # Whether it should be announced, when a player got eliminated (has no more hearts)
 announceElimination: true
 
@@ -245,8 +245,8 @@ gracePeriod:
   damageToPlayers: false
   # Should a player be able to use hearts during the grace period
   useHearts: false
-  # Should a player be able to loose hearts during the grace period (if set to false, the killer will also not gain a heart)
-  looseHearts: false
+  # Should a player be able to lose hearts during the grace period (if set to false, the killer will also not gain a heart)
+  loseHearts: false
   # Should a player be able to gain hearts during the grace period
   gainHearts: false
 
