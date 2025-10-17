@@ -40,6 +40,10 @@ heartsPerNaturalDeath: 1
 # The minimal amount of hearts. If a player gets to this amount of hearts, they will be eliminated.
 # PLEASE ONLY CHANGE IF YOU KNOW WHAT YOU ARE DOING!
 minHearts: 0
+# The minimal amount of hearts required for a player to drop or give hearts when dying.
+# Players below this threshold will still lose hearts but won't drop/give heart items.
+# Set to 0 to disable this feature (players can always drop/give hearts)
+minHeartsToSpawnHeartItem: 0
 # This option will enforce the heart limit on admin commands like /lifestealz hearts <add, set> <player> <amount>
 # Note that this
 enforceMaxHeartsOnAdminCommands: false

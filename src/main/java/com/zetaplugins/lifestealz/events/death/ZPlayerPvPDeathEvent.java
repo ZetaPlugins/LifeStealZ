@@ -24,6 +24,9 @@ public class ZPlayerPvPDeathEvent extends ZPlayerDeathEventBase {
     
     @Getter @Setter
     private String deathMessage;
+    
+    @Getter @Setter
+    private boolean heartSpawningBlocked;
 
     public ZPlayerPvPDeathEvent(PlayerDeathEvent originalEvent, Player killer, double heartsToLose, double heartsKillerGains) {
         super(originalEvent);
@@ -33,5 +36,6 @@ public class ZPlayerPvPDeathEvent extends ZPlayerDeathEventBase {
         this.shouldDropHearts = false;
         this.killerShouldGainHearts = true;
         this.deathMessage = originalEvent.getDeathMessage();
+        this.heartSpawningBlocked = false;
     }
 }
