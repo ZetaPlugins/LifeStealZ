@@ -129,6 +129,15 @@ public final class InteractionListener implements Listener {
             return;
         }
 
+        if (restrictedHeartUseByBypass(player)) {
+            player.sendMessage(MessageUtils.getAndFormatMsg(
+                    false,
+                    "noHeartUseWithBypass",
+                    "&cYou can't use hearts with bypass permission!"
+            ));
+            return;
+        }
+
         if (restrictedHeartByGracePeriod(player)) {
             player.sendMessage(MessageUtils.getAndFormatMsg(
                     false,
@@ -254,5 +263,9 @@ public final class InteractionListener implements Listener {
     private boolean restrictedHeartByGracePeriod(Player player) {
         GracePeriodManager gracePeriodManager = plugin.getGracePeriodManager();
         return gracePeriodManager.isInGracePeriod(player) && !gracePeriodManager.getConfig().useHearts();
+    }
+
+    private boolean restrictedHeartUseByBypass(Player player) {
+        return plugin.getBypassManager().hasBypass(player) && !plugin.getBypassManager().getConfig().useHearts();
     }
 }
