@@ -84,14 +84,6 @@ public final class LifeStealZAPIImpl implements LifeStealZAPI {
 
     @Override
     public boolean isBypassActive(org.bukkit.entity.Player player) {
-        if (!plugin.getConfig().getBoolean("bypassPermission.enabled")) return false;
-        final String node = plugin.getConfig().getString("bypassPermission.node", "lifestealz.bypass");
-        return player.hasPermission(node);
-    }
-
-    @Override
-    public boolean shouldBypassForDeath(org.bukkit.entity.Player victim) {
-        // Currently same as isBypassActive, but kept for forward-compat with future contextual rules
-        return isBypassActive(victim);
+        return plugin.getBypassManager().hasBypass(player);
     }
 }
