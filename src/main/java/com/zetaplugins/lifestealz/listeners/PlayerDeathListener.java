@@ -92,13 +92,13 @@ public final class PlayerDeathListener implements Listener {
         if (isDeathByPlayer && !killerInGracePeriod) {
             if (handleHeartGainCooldown(event, player, killer, healthToLoose)) {
                 preventKillerGain = true;
-                if (plugin.getConfig().getBoolean("heartGainCooldown.dropOnCooldown")) {
+                if (plugin.getConfig().getBoolean("heartGainCooldown.dropOnCooldown") && canSpawnHeartItem(playerData)) {
                     droppedAtKiller = true;
                 }
             }
             if (handleMaxHeartsLimit(event, player, killer, healthToLoose)) {
                 preventKillerGain = true;
-                if (plugin.getConfig().getBoolean("dropHeartsIfMax")) {
+                if (plugin.getConfig().getBoolean("dropHeartsIfMax") && canSpawnHeartItem(playerData)) {
                     droppedAtKiller = true;
                 }
             }
@@ -170,10 +170,14 @@ public final class PlayerDeathListener implements Listener {
 
         ZPlayerPvPDeathEvent pvpEvent = new ZPlayerPvPDeathEvent(event, killer, healthToLoose, healthGain);
 
-        boolean shouldDropFromPvP = plugin.getConfig().getBoolean("dropHeartsPlayer") && !droppedAtKiller;
-        pvpEvent.setShouldDropHearts(shouldDropFromPvP);
+        // Check if player has enough hearts to spawn heart items
+        boolean canSpawnHearts = canSpawnHeartItem(playerData);
+        boolean shouldDropFromPvP = plugin.getConfig().getBoolean("dropHeartsPlayer") && !droppedAtKiller && canSpawnHearts;
+        boolean killerShouldGainHearts = !preventKillerGain && canSpawnHearts;
 
-        pvpEvent.setKillerShouldGainHearts(!preventKillerGain);
+        pvpEvent.setShouldDropHearts(shouldDropFromPvP);
+        pvpEvent.setKillerShouldGainHearts(killerShouldGainHearts);
+        pvpEvent.setHeartSpawningBlocked(!canSpawnHearts);
 
         Bukkit.getPluginManager().callEvent(pvpEvent);
 
@@ -201,7 +205,11 @@ public final class PlayerDeathListener implements Listener {
     private void handleNaturalDeath(PlayerDeathEvent event, Player player, PlayerData playerData, double healthToLoose) {
         ZPlayerNaturalDeathEvent naturalEvent =
                 new ZPlayerNaturalDeathEvent(event, healthToLoose);
-        naturalEvent.setShouldDropHearts(plugin.getConfig().getBoolean("dropHeartsNatural"));
+        
+        // Check if player has enough hearts to spawn heart items
+        boolean canSpawnHearts = canSpawnHeartItem(playerData);
+        naturalEvent.setShouldDropHearts(plugin.getConfig().getBoolean("dropHeartsNatural") && canSpawnHearts);
+        naturalEvent.setHeartSpawningBlocked(!canSpawnHearts);
         Bukkit.getPluginManager().callEvent(naturalEvent);
 
         if (!naturalEvent.isCancelled()) {
@@ -355,5 +363,11 @@ public final class PlayerDeathListener implements Listener {
     private boolean restrictedHeartGainByGracePeriod(Player player) {
         GracePeriodManager gracePeriodManager = plugin.getGracePeriodManager();
         return gracePeriodManager.isInGracePeriod(player) && !gracePeriodManager.getConfig().gainHearts();
+    }
+
+    private boolean canSpawnHeartItem(PlayerData playerData) {
+        int minHearts = plugin.getConfig().getInt("minHeartsToSpawnHeartItem");
+        if (minHearts <= 0) return true; // Feature disabled
+        return playerData.getMaxHealth() >= minHearts * 2;
     }
 }
