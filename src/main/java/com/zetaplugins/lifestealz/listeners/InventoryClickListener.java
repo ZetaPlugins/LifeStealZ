@@ -2,7 +2,7 @@ package com.zetaplugins.lifestealz.listeners;
 
 import com.zetaplugins.lifestealz.util.GuiManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
-import com.zetaplugins.lifestealz.util.ReviveTask;
+import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.WebHookManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -168,7 +168,7 @@ public final class InventoryClickListener implements Listener {
             return;
         }
 
-        if (LifeStealZ.reviveTasks.get(beaconLocation) != null) {
+        if (plugin.getReviveTaskManager().isReviving(beaconLocation)) {
             player.sendMessage(MessageUtils.getAndFormatMsg(
                     false,
                     "reviveBeaconAlreadyInUse",
@@ -188,9 +188,7 @@ public final class InventoryClickListener implements Listener {
             return;
         }
 
-        boolean targetReviving = LifeStealZ.reviveTasks.values()
-                .stream()
-                .anyMatch(task -> task.target().equals(target.getUniqueId()));
+        boolean targetReviving = plugin.getReviveTaskManager().isRevivingTarget(target.getUniqueId());
 
         if (targetReviving) {
             player.sendMessage(MessageUtils.getAndFormatMsg(
@@ -359,13 +357,15 @@ public final class InventoryClickListener implements Listener {
                 applyReviveData(data);
                 executeReviveActions(reviver, target, location);
 
+                plugin.getReviveTaskManager().removeReviveTask(beaconLocation);
+
                 plugin.getReviveBeaconEffectManager().clearAllEffects(beaconLocation);
                 beaconLocation.getBlock().setType(Material.AIR);
                 beaconLocation.getWorld().playSound(beaconLocation, Sound.ENTITY_PLAYER_LEVELUP, 500.0f, 1.0f);
             }
         }.runTaskLater(plugin, itemData.getReviveTime() * 20L);
 
-        LifeStealZ.reviveTasks.put(beaconLocation, new ReviveTask(
+        plugin.getReviveTaskManager().addReviveTask(beaconLocation, new ReviveTask(
                 beaconLocation,
                 reviveTask,
                 reviver.getUniqueId(),
