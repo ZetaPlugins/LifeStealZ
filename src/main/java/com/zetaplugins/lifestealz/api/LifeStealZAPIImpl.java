@@ -81,4 +81,9 @@ public final class LifeStealZAPIImpl implements LifeStealZAPI {
     public String getCustomItemID(ItemStack item) {
         return CustomItemManager.getCustomItemId(item);
     }
+
+    @Override
+    public boolean isBypassActive(org.bukkit.entity.Player player) {
+        return plugin.getBypassManager().hasBypass(player);
+    }
 }

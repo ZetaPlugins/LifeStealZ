@@ -76,3 +76,9 @@ permissions:
         default: true
     lifestealz.maxhearts:
         description: set the max hearts
+    lifestealz.bypass:
+        description: Prevents heart loss, drops, and killer rewards on death
+        default: false
+    lifestealz.admin.bypasscheck:
+        description: Check other players' and your own bypass status
+        default: op

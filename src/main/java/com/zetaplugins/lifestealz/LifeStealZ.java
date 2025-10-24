@@ -25,8 +25,6 @@ import com.zetaplugins.lifestealz.storage.SQLiteStorage;
 import com.zetaplugins.lifestealz.util.worldguard.WorldGuardManager;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class LifeStealZ extends JavaPlugin {
 
@@ -40,6 +38,7 @@ public final class LifeStealZ extends JavaPlugin {
     private GeyserPlayerFile geyserPlayerFile;
     private WebHookManager webHookManager;
     private GracePeriodManager gracePeriodManager;
+    private BypassManager bypassManager;
     private EliminatedPlayersCache eliminatedPlayersCache;
     private OfflinePlayerCache offlinePlayerCache;
     private AsyncTaskManager asyncTaskManager;
@@ -94,6 +93,7 @@ public final class LifeStealZ extends JavaPlugin {
 
         versionChecker = new VersionChecker(this, "l8Uv7FzS");
         gracePeriodManager = new GracePeriodManager(this);
+        bypassManager = new BypassManager(this);
         webHookManager = new WebHookManager(this);
 
         eliminatedPlayersCache = new EliminatedPlayersCache(this);
@@ -170,6 +170,10 @@ public final class LifeStealZ extends JavaPlugin {
 
     public GracePeriodManager getGracePeriodManager() {
         return gracePeriodManager;
+    }
+
+    public BypassManager getBypassManager() {
+        return bypassManager;
     }
 
     public GeyserManager getGeyserManager() {
