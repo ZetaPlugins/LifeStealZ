@@ -76,8 +76,6 @@ public final class PlayerDeathListener implements Listener {
         boolean victimHasBypass = restrictedHeartLossByBypass(player);
         boolean killerHasBypass = isDeathByPlayer && killer != null && restrictedHeartGainByBypass(killer);
 
-        System.out.println("Killer has bypass: " + killerHasBypass);
-
         if (victimHasBypass || killerHasBypass) {
             ZPlayerBypassDeathEvent bypassEvent = 
                     new ZPlayerBypassDeathEvent(event, killer, victimHasBypass, killerHasBypass);

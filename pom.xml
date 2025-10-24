@@ -110,10 +110,17 @@
                                 <include>**/*</include>
                             </includes>
                         </filter>
+                        <filter>
+                            <artifact>com.zetaplugins:zetacore</artifact>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </filter>
                     </filters>
                     <artifactSet>
                         <includes>
                             <include>com.zaxxer:HikariCP</include> <!-- Include HikariCP dependency -->
+                            <include>com.zetaplugins:zetacore</include>
                         </includes>
                     </artifactSet>
                     <transformers>
@@ -157,7 +164,10 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
-
+        <repository>
+            <id>zetaplugins</id>
+            <url>https://maven.zetaplugins.com/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -165,6 +175,11 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>6.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zetaplugins</groupId>
+            <artifactId>zetacore</artifactId>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>

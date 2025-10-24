@@ -3,6 +3,7 @@ package com.zetaplugins.lifestealz;
 import com.zetaplugins.lifestealz.util.*;
 import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.revive.ReviveTaskManager;
+import com.zetaplugins.zetacore.ZetaCorePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -26,7 +27,7 @@ import com.zetaplugins.lifestealz.util.worldguard.WorldGuardManager;
 
 import java.io.File;
 
-public final class LifeStealZ extends JavaPlugin {
+public final class LifeStealZ extends ZetaCorePlugin {
 
     private VersionChecker versionChecker;
     private Storage storage;

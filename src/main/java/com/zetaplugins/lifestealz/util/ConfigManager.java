@@ -41,6 +41,18 @@ public final class ConfigManager {
         return getAddonConfig(addon.getMetadata().getConfigName(), addon.getClass());
     }
 
+    /**
+     * Gets all configs as a map of file name to file content used for debug command
+     * @return Map of file name to file content
+     */
+    public Map<String, String> getConfigsMap() {
+        Map<String, String> configs = new HashMap<>();
+        configs.put("config.yml", plugin.getConfig().saveToString());
+        configs.put("storage.yml", getStorageConfig().saveToString());
+        configs.put("items.yml", getCustomItemConfig().saveToString());
+        return configs;
+    }
+
     public FileConfiguration getAddonConfig(String configName, Class<? extends LifeStealZAddon> addonClass) {
         if (addonConfigs.containsKey(configName)) {
             return addonConfigs.get(configName);

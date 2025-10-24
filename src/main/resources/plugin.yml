@@ -56,6 +56,9 @@ permissions:
     lifestealz.admin.graceperiod:
         description: manage players grace period
         default: op
+    lifestealz.admin.debug:
+        description: access debug commands
+        default: op
     lifestealz.bypassrevivelimit:
         description: bypass the player revive limit
         default: op
