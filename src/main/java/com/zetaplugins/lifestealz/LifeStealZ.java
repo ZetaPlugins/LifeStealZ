@@ -25,8 +25,6 @@ import com.zetaplugins.lifestealz.storage.SQLiteStorage;
 import com.zetaplugins.lifestealz.util.worldguard.WorldGuardManager;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class LifeStealZ extends JavaPlugin {
 

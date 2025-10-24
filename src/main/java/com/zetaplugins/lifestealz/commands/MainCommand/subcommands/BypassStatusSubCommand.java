@@ -45,7 +45,7 @@ public final class BypassStatusSubCommand implements SubCommand {
                 MessageUtils.getAndFormatMsg(
                     true,
                     "bypassStatusActive",
-                    "&a%player% has bypass permission active!",
+                    "&7Bypass permission is &aactive &7for %player%",
                     new MessageUtils.Replaceable("%player%", targetPlayer.getName())
                 )
             );
@@ -54,7 +54,7 @@ public final class BypassStatusSubCommand implements SubCommand {
                 MessageUtils.getAndFormatMsg(
                     true,
                     "bypassStatusInactive",
-                    "&c%player% does not have bypass permission active.",
+                    "&7Bypass permission is &cinactive &7for %player%.",
                     new MessageUtils.Replaceable("%player%", targetPlayer.getName())
                 )
             );
@@ -70,6 +70,6 @@ public final class BypassStatusSubCommand implements SubCommand {
 
     @Override
     public boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission("lifestealz.bypass.check");
+        return sender.hasPermission("lifestealz.admin.bypasscheck");
     }
 }

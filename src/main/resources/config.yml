@@ -173,6 +173,7 @@ gracePeriod:
     # - "say The grace period for &player& has ended"
 
 # This section enables a permission-based bypass similar to the grace period.
+# The bypass permission is "lifestealz.bypass" and is not granted by default, even not to ops.
 bypassPermission:
   # If the bypass permission feature should be enabled
   enabled: true
@@ -184,7 +185,7 @@ bypassPermission:
   useHearts: false
   # Should a player be able to lose hearts with bypass permission (if set to false, the killer will also not gain a heart)
   looseHearts: false
-  # Should a player be able to gain hearts with bypass permission
+  # Should a player be able to gain hearts with bypass permission (if set to false, the victim will also not lose a heart)
   gainHearts: false
 
 heartGainCooldown:
