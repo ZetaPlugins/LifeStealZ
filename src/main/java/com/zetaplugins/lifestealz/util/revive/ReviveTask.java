@@ -1,4 +1,4 @@
-package com.zetaplugins.lifestealz.util;
+package com.zetaplugins.lifestealz.util.revive;
 
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;

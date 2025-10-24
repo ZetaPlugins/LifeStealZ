@@ -1,4 +1,5 @@
 maven-repo-publish.sh
+.idea/
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,java,maven,gradle,visualstudiocode,macos,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,java,maven,gradle,visualstudiocode,macos,windows,linux

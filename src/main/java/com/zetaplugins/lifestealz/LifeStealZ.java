@@ -1,6 +1,8 @@
 package com.zetaplugins.lifestealz;
 
 import com.zetaplugins.lifestealz.util.*;
+import com.zetaplugins.lifestealz.util.revive.ReviveTask;
+import com.zetaplugins.lifestealz.util.revive.ReviveTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -9,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.zetaplugins.lifestealz.api.LifeStealZAPI;
 import com.zetaplugins.lifestealz.api.LifeStealZAPIImpl;
-import com.zetaplugins.lifestealz.util.*;
 import com.zetaplugins.lifestealz.caches.EliminatedPlayersCache;
 import com.zetaplugins.lifestealz.caches.OfflinePlayerCache;
 import com.zetaplugins.lifestealz.util.commands.CommandManager;
@@ -43,11 +44,10 @@ public final class LifeStealZ extends JavaPlugin {
     private OfflinePlayerCache offlinePlayerCache;
     private AsyncTaskManager asyncTaskManager;
     private ReviveBeaconEffectManager reviveBeaconEffectManager;
+    private ReviveTaskManager reviveTaskManager;
     private final boolean hasWorldGuard = Bukkit.getPluginManager().getPlugin("WorldGuard") != null;
     private final boolean hasPlaceholderApi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
     private final boolean hasGeyser = Bukkit.getPluginManager().getPlugin("floodgate") != null;
-
-    public static Map<Location, ReviveTask> reviveTasks = new HashMap<>();
 
     @Override
     public void onLoad() {
@@ -81,6 +81,7 @@ public final class LifeStealZ extends JavaPlugin {
 
         asyncTaskManager = new AsyncTaskManager();
         reviveBeaconEffectManager = new ReviveBeaconEffectManager(this);
+        reviveTaskManager = new ReviveTaskManager();
 
         languageManager = new LanguageManager(this);
         configManager = new ConfigManager(this);
@@ -137,6 +138,10 @@ public final class LifeStealZ extends JavaPlugin {
 
     public ReviveBeaconEffectManager getReviveBeaconEffectManager() {
         return reviveBeaconEffectManager;
+    }
+
+    public ReviveTaskManager getReviveTaskManager() {
+        return reviveTaskManager;
     }
 
     public VersionChecker getVersionChecker() {
