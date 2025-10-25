@@ -254,13 +254,14 @@ gracePeriod:
 
   # Custom commands to be executed when the grace period starts
   startCommands:
-    # - "say The grace period for &player& has started"
+  # - "say The grace period for &player& has started"
 
   # Custom commands to be executed when the grace period ends
   endCommands:
-    # - "say The grace period for &player& has ended"
+  # - "say The grace period for &player& has ended"
 
 # This section enables a permission-based bypass similar to the grace period.
+# The bypass permission is "lifestealz.bypass" and is not granted by default, even not to ops.
 bypassPermission:
   # If the bypass permission feature should be enabled
   enabled: true
@@ -272,7 +273,7 @@ bypassPermission:
   useHearts: false
   # Should a player be able to lose hearts with bypass permission (if set to false, the killer will also not gain a heart)
   looseHearts: false
-  # Should a player be able to gain hearts with bypass permission
+  # Should a player be able to gain hearts with bypass permission (if set to false, the victim will also not lose a heart)
   gainHearts: false
 
 heartGainCooldown:
@@ -297,8 +298,8 @@ antiAlt:
   # Add custom comamnds, to be executed when a possible alt kill attempt is detected
   # You can use &player& to insert the player name (commands are executed for both players)
   commands:
-    # - "say Please don't kill alts"
-    # - "ban &player& 1h"
+  # - "say Please don't kill alts"
+  # - "ban &player& 1h"
 
 webhook:
   # If a webhook should be sent, when a player is eliminated
