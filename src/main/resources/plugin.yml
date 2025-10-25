@@ -2,9 +2,9 @@ name: LifeStealZ
 version: '${project.version}'
 main: com.zetaplugins.lifestealz.LifeStealZ
 api-version: '1.19'
-author: Kartoffelchips
-website: https://lsz.strassburger.dev/
-description: LifeStealZ - The Ultimate LifeSteal SMP Plugin!
+author: Kartoffelchipss
+website: https://zetaplugins.com/
+description: The Ultimate LifeSteal SMP Plugin!
 
 softdepend:
     - PlaceholderAPI
