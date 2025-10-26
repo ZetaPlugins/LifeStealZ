@@ -21,6 +21,7 @@ public class CustomItemData {
     private final boolean requirePermission;
     private final boolean invulnerable;
     private final boolean despawnable;
+    private final int customModelID;
     private final List<String> whitelistedWorlds;
 
     /**
@@ -43,6 +44,7 @@ public class CustomItemData {
         this.invulnerable = section.getBoolean("invulnerable", false);
         this.despawnable = section.getBoolean("despawnable", true);
         this.whitelistedWorlds = section.getStringList("whitelistedWorlds");
+        this.customModelID = section.getInt("customModelId", 0);
     }
 
     /**
@@ -100,6 +102,10 @@ public class CustomItemData {
 
     public boolean isDespawnable() {
         return despawnable;
+    }
+
+    public int getCustomModelID() {
+        return customModelID;
     }
 
     public List<String> getWhitelistedWorlds() {

@@ -1,5 +1,7 @@
 package com.zetaplugins.lifestealz.util.customitems;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -9,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import com.zetaplugins.lifestealz.util.MessageUtils;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +153,23 @@ public final class CustomItem {
         itemMeta.lore(newLore);
         itemStack.setItemMeta(itemMeta);
 
+        return this;
+    }
+
+    /**
+     * Sets the custom item ID using Paper's CustomModelData DataComponent.
+     * @param stringId The string ID of the custom item.
+     * @param intId The integer ID of the custom item. Use 0 if not needed.
+     * @return The current CustomItem instance for method chaining.
+     */
+    public CustomItem setId(String stringId, int intId) {
+        var customModelDataBuilder = CustomModelData.customModelData().addString(stringId);
+        if (intId != 0) customModelDataBuilder.addFloat(intId);
+
+        itemStack.setData(
+                DataComponentTypes.CUSTOM_MODEL_DATA,
+                customModelDataBuilder.build()
+        );
         return this;
     }
 

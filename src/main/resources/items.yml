@@ -15,6 +15,9 @@ defaultheart: # <- This is the item id that can be used in recipes and for permi
   material: "NETHER_STAR"
   # If set to true, the enchant glint will be applied to the item
   enchanted: false
+  # The custom model data of the item (set to 0 for no custom model data)
+  # When using Minecraft 1.21.4 or newer, items also have a "minecraft:custom_model_data" property of "lifestealz_{itemId}"
+  customModelId: 0
   # Custom item type for the item. You can use:
     # - "heart" for a heart item
     # - "revive" for a revive item
@@ -75,6 +78,7 @@ revive:
   # The material has to be a beacon if customItemType is "revivebeacon"
   material: "BEACON"
   enchanted: true
+  customModelId: 0
   customItemType: "revivebeacon"
   # --- Revive Beacon Settings --- (only relevant if customItemType is "revivebeacon")
   # The time in seconds it takes to revive a player
