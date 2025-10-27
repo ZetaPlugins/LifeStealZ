@@ -23,8 +23,7 @@ public final class BlockTagManager {
     public static <P, C> void tagBlock(Block block, NamespacedKey key, PersistentDataType<P, C> type, C value) {
         BlockState state = block.getState();
 
-        if (state instanceof TileState) {
-            TileState tileState = (TileState) state;
+        if (state instanceof TileState tileState) {
             PersistentDataContainer container = tileState.getPersistentDataContainer();
 
             container.set(key, type, value);
@@ -45,8 +44,7 @@ public final class BlockTagManager {
     public static <P, C> C getBlockTag(Block block, NamespacedKey key, PersistentDataType<P, C> type) {
         BlockState state = block.getState();
 
-        if (state instanceof TileState) {
-            TileState tileState = (TileState) state;
+        if (state instanceof TileState tileState) {
             PersistentDataContainer container = tileState.getPersistentDataContainer();
 
             return container.get(key, type);
