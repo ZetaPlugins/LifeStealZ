@@ -80,7 +80,7 @@ revive:
   enchanted: true
   customModelId: 0
   customItemType: "revivebeacon"
-  # --- Revive Beacon Settings --- (only relevant if customItemType is "revivebeacon")
+  # --- Revive Beacon specific Settings --- (only relevant if customItemType is "revivebeacon")
   # The time in seconds it takes to revive a player
   reviveTime: 30
   # If players should be able to break the beacon while reviving, interrupting the revive process
@@ -100,7 +100,7 @@ revive:
   # The color of the particle ring
   # possible values: WHITE, GRAY, RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK
   particleColor: "RED"
-  # --- End of Revive Beacon Settings ---
+  # --- End of Revive Beacon specific Settings ---
   requirePermission: false # (lifestealz.item.revive)
   craftable: true
   recipes:

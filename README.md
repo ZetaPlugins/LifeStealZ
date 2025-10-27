@@ -351,12 +351,15 @@ defaultheart: # <- This is the item id that can be used in recipes and for permi
   material: "NETHER_STAR"
   # If set to true, the enchant glint will be applied to the item
   enchanted: false
-  # Custom item type for the item. You can use:
+  # The custom model data of the item (set to 0 for no custom model data)
+  # When using Minecraft 1.21.4 or newer, items also have a "minecraft:custom_model_data" property of "lifestealz_{itemId}"
+  customModelId: 0
+    # Custom item type for the item. You can use:
     # - "heart" for a heart item
     # - "revive" for a revive item
     # - "revivebeacon" for a revive beacon item -> This item must actually be a beacon to work!
     # - "none" for a custom item that can be used for crafting and can be used as a normal item (e.g. if it is an enderpearl it still can be thrown)
-    # - "non-usable" for a custom item that can be used for crafting and cannot be used as a normal item (e.g. if it is an enderpearl it cannot be thrown)
+  # - "non-usable" for a custom item that can be used for crafting and cannot be used as a normal item (e.g. if it is an enderpearl it cannot be thrown)
   customItemType: "heart"
   # --- Heart Item Settings --- (only relevant if customItemType is "heart")
   # When customItemType is "heart", this value is used to determine how many hearts the item gives
@@ -411,8 +414,9 @@ revive:
   # The material has to be a beacon if customItemType is "revivebeacon"
   material: "BEACON"
   enchanted: true
+  customModelId: 0
   customItemType: "revivebeacon"
-  # --- Revive Beacon Settings --- (only relevant if customItemType is "revivebeacon")
+  # --- Revive Beacon specific Settings --- (only relevant if customItemType is "revivebeacon")
   # The time in seconds it takes to revive a player
   reviveTime: 30
   # If players should be able to break the beacon while reviving, interrupting the revive process
@@ -432,7 +436,7 @@ revive:
   # The color of the particle ring
   # possible values: WHITE, GRAY, RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK
   particleColor: "RED"
-  # --- End of Revive Beacon Settings ---
+  # --- End of Revive Beacon specific Settings ---
   requirePermission: false # (lifestealz.item.revive)
   craftable: true
   recipes:
