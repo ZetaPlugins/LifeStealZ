@@ -57,7 +57,7 @@ public final class LifeStealZ extends ZetaCorePlugin {
             getLogger().severe("---------------------------------------------------");
             getLogger().severe("LifeStealZ does not support Spigot or Bukkit!");
             getLogger().severe("Please use Paper or any fork of Paper (like Purpur). If you need further assistance, please join our Discord server:");
-            getLogger().severe("https://dc.lifestealz.com/");
+            getLogger().severe("https://strassburger.org/discord");
             getLogger().severe("---------------------------------------------------");
         }
 
