@@ -143,6 +143,7 @@ bossbarColor: RED
 # Available Options: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20
 bossbarStyle: SOLID
 
+# Grace periods are per player and start when a player joins the server for the first time.
 gracePeriod:
   # If a grace period should be enabled
   enabled: false
@@ -163,6 +164,8 @@ gracePeriod:
   looseHearts: false
   # Should a player be able to gain hearts during the grace period
   gainHearts: false
+  # Should players be allowed to withdraw hearts during the grace period
+  allowWithdraw: false
 
   # Custom commands to be executed when the grace period starts
   startCommands:

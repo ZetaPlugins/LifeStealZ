@@ -149,3 +149,4 @@ debugFileCreated: |-
   &8 [&a✔&8] &7 Debug-Daten in den folgenden Dateien gespeichert:
   <click:COPY_TO_CLIPBOARD:%jsonPath%><#8b73f6>%jsonPath%</click>
   <click:COPY_TO_CLIPBOARD:%txtPath%><#8b73f6>%txtPath%</click>
+gracePeriodWithdraw: "&cDu kannst während der Schutzzeit keine Herzen auszahlen!"
