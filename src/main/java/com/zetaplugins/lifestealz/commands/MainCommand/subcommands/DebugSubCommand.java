@@ -31,7 +31,7 @@ public final class DebugSubCommand implements SubCommand {
             return false;
         }
 
-        if (args.length == 0) {
+        if (args.length == 1) {
             throwUsageError(sender, "/lifestealz debug <upload | generate>");
             return true;
         }
