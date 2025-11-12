@@ -31,6 +31,7 @@ public final class EventManager {
         registerListener(new PrepareItemCraft());
         registerListener(new PrepareGrindstone());
         registerListener(new PlayerDropItemListener());
+        registerListener(new CrafterCraftListener());
 
         // Revive Beacon Listeners
         registerListener(new ReviveBeaconPlaceListener(plugin));
