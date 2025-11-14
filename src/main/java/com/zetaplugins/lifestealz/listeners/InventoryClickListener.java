@@ -1,10 +1,10 @@
 package com.zetaplugins.lifestealz.listeners;
 
-import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.GuiManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.WebHookManager;
+import com.zetaplugins.zetacore.annotations.AutoRegisterListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;

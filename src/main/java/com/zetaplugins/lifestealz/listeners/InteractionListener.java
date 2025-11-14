@@ -1,7 +1,7 @@
 package com.zetaplugins.lifestealz.listeners;
 
-import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.*;
+import com.zetaplugins.zetacore.annotations.AutoRegisterListener;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

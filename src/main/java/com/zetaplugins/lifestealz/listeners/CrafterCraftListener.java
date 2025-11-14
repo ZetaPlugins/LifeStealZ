@@ -1,7 +1,7 @@
 package com.zetaplugins.lifestealz.listeners;
 
-import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
+import com.zetaplugins.zetacore.annotations.AutoRegisterListener;
 import org.bukkit.block.Crafter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

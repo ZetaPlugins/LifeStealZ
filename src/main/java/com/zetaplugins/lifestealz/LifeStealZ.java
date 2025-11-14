@@ -4,6 +4,7 @@ import com.zetaplugins.lifestealz.util.*;
 import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.revive.ReviveTaskManager;
 import com.zetaplugins.zetacore.ZetaCorePlugin;
+import com.zetaplugins.zetacore.services.events.AutoEventRegistrar;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -28,6 +29,7 @@ import com.zetaplugins.lifestealz.util.worldguard.WorldGuardManager;
 import java.io.File;
 
 public final class LifeStealZ extends ZetaCorePlugin {
+    private static final String PACKAGE_PREFIX = "com.zetaplugins.lifestealz";
 
     private VersionChecker versionChecker;
     private Storage storage;
@@ -102,7 +104,8 @@ public final class LifeStealZ extends ZetaCorePlugin {
 
         new CommandManager(this).registerCommands();
 
-        new EventManager(this).registerAllListeners();
+        var registeredEvents = new AutoEventRegistrar(this, PACKAGE_PREFIX).registerAllListeners();
+        getLogger().info("Registered " + registeredEvents.size() + " event listeners");
 
         initializeBStats();
 

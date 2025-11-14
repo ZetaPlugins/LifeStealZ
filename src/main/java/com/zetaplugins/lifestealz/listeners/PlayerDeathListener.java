@@ -1,6 +1,5 @@
 package com.zetaplugins.lifestealz.listeners;
 
-import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.events.death.*;
 import com.zetaplugins.lifestealz.util.BypassManager;
 import com.zetaplugins.lifestealz.util.CooldownManager;
@@ -8,16 +7,15 @@ import com.zetaplugins.lifestealz.util.GracePeriodManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.WebHookManager;
 import com.zetaplugins.lifestealz.events.*;
+import com.zetaplugins.zetacore.annotations.AutoRegisterListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;

@@ -1,6 +1,6 @@
 package com.zetaplugins.lifestealz.listeners.revivebeacon;
 
-import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
+import com.zetaplugins.zetacore.annotations.AutoRegisterListener;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
