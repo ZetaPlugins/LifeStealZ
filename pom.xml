@@ -123,12 +123,6 @@
                             </includes>
                         </filter>
                         <filter>
-                            <artifact>org.reflections:reflections</artifact>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                        </filter>
-                        <filter>
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/*.SF</exclude>
@@ -141,7 +135,6 @@
                         <includes>
                             <include>com.zaxxer:HikariCP</include>
                             <include>com.zetaplugins:zetacore</include>
-                            <include>org.reflections:reflections</include>
                         </includes>
                     </artifactSet>
                     <transformers>
@@ -189,11 +182,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
-        </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
