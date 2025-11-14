@@ -6,7 +6,7 @@
 
     <groupId>com.zetaplugins</groupId>
     <artifactId>lifestealz</artifactId>
-    <version>2.20.2</version>
+    <version>2.20.3</version>
     <packaging>jar</packaging>
 
     <name>LifeStealZ</name>
