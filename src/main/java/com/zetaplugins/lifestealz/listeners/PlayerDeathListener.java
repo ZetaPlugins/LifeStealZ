@@ -10,11 +10,15 @@ import com.zetaplugins.lifestealz.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 import com.zetaplugins.lifestealz.LifeStealZ;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
@@ -27,6 +31,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.zetaplugins.lifestealz.util.MaxHeartsManager.getMaxHearts;
+import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.DESPAWNABLE_KEY;
+import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.INVULNERABLE_KEY;
 
 public final class PlayerDeathListener implements Listener {
 
@@ -361,9 +367,16 @@ public final class PlayerDeathListener implements Listener {
     }
 
     private void dropHeartsNaturally(Location location, int amount, ItemStack itemStack) {
-        World world = location.getWorld();
+        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
+        final boolean shouldHaveUnlimitedLifetime = container.has(DESPAWNABLE_KEY)
+                && !Boolean.TRUE.equals(container.get(DESPAWNABLE_KEY, PersistentDataType.BOOLEAN));
+        final boolean shouldBeInvulnerable = container.has(INVULNERABLE_KEY)
+                && Boolean.TRUE.equals(container.get(INVULNERABLE_KEY, PersistentDataType.BOOLEAN));
+
         for (int i = 0; i < amount; i++) {
-            world.dropItemNaturally(location, itemStack);
+            Item item =  location.getWorld().dropItemNaturally(location, itemStack);
+            if (shouldHaveUnlimitedLifetime) item.setUnlimitedLifetime(true);
+            if (shouldBeInvulnerable) item.setInvulnerable(true);
         }
     }
 
