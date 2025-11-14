@@ -3,6 +3,7 @@ package com.zetaplugins.lifestealz;
 import com.zetaplugins.lifestealz.util.*;
 import com.zetaplugins.lifestealz.util.revive.ReviveTaskManager;
 import com.zetaplugins.zetacore.ZetaCorePlugin;
+import com.zetaplugins.zetacore.services.bStats.Metrics;
 import com.zetaplugins.zetacore.services.commands.AutoCommandRegistrar;
 import com.zetaplugins.zetacore.services.events.AutoEventRegistrar;
 import org.bukkit.Bukkit;
@@ -238,7 +239,7 @@ public final class LifeStealZ extends ZetaCorePlugin {
 
     private void initializeBStats() {
         int pluginId = 18735;
-        Metrics metrics = new Metrics(this, pluginId);
+        Metrics metrics = createBStatsMetrics(pluginId);
 
         metrics.addCustomChart(new Metrics.SimplePie("storage_type", () -> getConfigManager().getStorageConfig().getString("type")));
         metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("lang")));
