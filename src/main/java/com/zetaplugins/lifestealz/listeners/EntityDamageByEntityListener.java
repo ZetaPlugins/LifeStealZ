@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import com.zetaplugins.lifestealz.util.BypassManager;
 import com.zetaplugins.lifestealz.util.GracePeriodManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 
+@AutoRegisterListener
 public final class EntityDamageByEntityListener implements Listener {
     private final LifeStealZ plugin;
 

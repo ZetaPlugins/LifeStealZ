@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.storage.PlayerData;
 import com.zetaplugins.lifestealz.storage.Storage;
 
+@AutoRegisterListener
 public final class PlayerLoginListener implements Listener {
     private final LifeStealZ plugin;
 

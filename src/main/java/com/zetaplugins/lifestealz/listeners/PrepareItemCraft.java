@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -7,6 +8,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
 
+@AutoRegisterListener
 public final class PrepareItemCraft implements Listener {
 
     @EventHandler

@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import com.zetaplugins.lifestealz.LifeStealZ;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
 
+@AutoRegisterListener
 public final class InteractionEntityEventListener implements Listener {
     private final LifeStealZ plugin;
 

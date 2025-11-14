@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -21,6 +22,7 @@ import com.zetaplugins.lifestealz.storage.PlayerData;
 
 import java.util.List;
 
+@AutoRegisterListener
 public final class InteractionListener implements Listener {
     private final LifeStealZ plugin;
 

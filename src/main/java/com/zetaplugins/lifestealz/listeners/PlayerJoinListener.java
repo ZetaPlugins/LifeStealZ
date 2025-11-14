@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +12,7 @@ import com.zetaplugins.lifestealz.util.geysermc.GeyserPlayerFile;
 import com.zetaplugins.lifestealz.storage.PlayerData;
 import com.zetaplugins.lifestealz.storage.Storage;
 
+@AutoRegisterListener
 public final class PlayerJoinListener implements Listener {
 
     private final LifeStealZ plugin;

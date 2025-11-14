@@ -103,9 +103,15 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.reflections</pattern>
+                            <shadedPattern>com.zetaplugins.lifestealz.libs.reflections</shadedPattern>
+                        </relocation>
+                    </relocations>
                     <filters>
                         <filter>
-                            <artifact>com.zaxxer:HikariCP</artifact> <!-- Include only HikariCP -->
+                            <artifact>com.zaxxer:HikariCP</artifact>
                             <includes>
                                 <include>**/*</include>
                             </includes>
@@ -116,20 +122,32 @@
                                 <include>**/*</include>
                             </includes>
                         </filter>
+                        <filter>
+                            <artifact>org.reflections:reflections</artifact>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </filter>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
                     </filters>
                     <artifactSet>
                         <includes>
-                            <include>com.zaxxer:HikariCP</include> <!-- Include HikariCP dependency -->
+                            <include>com.zaxxer:HikariCP</include>
                             <include>com.zetaplugins:zetacore</include>
+                            <include>org.reflections:reflections</include>
                         </includes>
                     </artifactSet>
                     <transformers>
-                        <transformer
-                            implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                        <transformer
-                            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.zetaplugins.lifestealz.LifeStealZ</mainClass> <!-- Set
-                            your main class if needed -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>com.zetaplugins.lifestealz.LifeStealZ</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
@@ -171,6 +189,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>

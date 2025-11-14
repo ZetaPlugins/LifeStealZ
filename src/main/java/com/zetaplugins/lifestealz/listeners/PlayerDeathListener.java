@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.events.death.*;
 import com.zetaplugins.lifestealz.util.BypassManager;
 import com.zetaplugins.lifestealz.util.CooldownManager;
@@ -34,6 +35,7 @@ import static com.zetaplugins.lifestealz.util.MaxHeartsManager.getMaxHearts;
 import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.DESPAWNABLE_KEY;
 import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.INVULNERABLE_KEY;
 
+@AutoRegisterListener
 public final class PlayerDeathListener implements Listener {
 
     private final LifeStealZ plugin;

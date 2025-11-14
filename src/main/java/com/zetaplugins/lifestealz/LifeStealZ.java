@@ -102,7 +102,7 @@ public final class LifeStealZ extends ZetaCorePlugin {
 
         new CommandManager(this).registerCommands();
 
-        new EventManager(this).registerListeners();
+        new EventManager(this).registerAllListeners();
 
         initializeBStats();
 

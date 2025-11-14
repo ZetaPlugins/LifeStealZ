@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners.revivebeacon;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -18,6 +19,7 @@ import com.zetaplugins.lifestealz.util.customblocks.CustomBlock;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
 import com.zetaplugins.lifestealz.util.customitems.customitemdata.CustomReviveBeaconItemData;
 
+@AutoRegisterListener
 public final class ReviveBeaconBreakListener implements Listener {
     private final LifeStealZ plugin;
 

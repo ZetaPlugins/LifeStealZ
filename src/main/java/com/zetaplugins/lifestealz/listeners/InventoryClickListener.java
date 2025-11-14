@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.GuiManager;
 import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.revive.ReviveTask;
@@ -27,6 +28,7 @@ import com.zetaplugins.lifestealz.util.customitems.customitemdata.CustomReviveBe
 import java.util.List;
 import java.util.UUID;
 
+@AutoRegisterListener
 public final class InventoryClickListener implements Listener {
     private final LifeStealZ plugin;
 

@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +13,7 @@ import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
 
 import static com.zetaplugins.lifestealz.util.MessageUtils.formatTime;
 
+@AutoRegisterListener
 public final class PlayerItemPickupListener implements Listener {
     private final LifeStealZ plugin;
 

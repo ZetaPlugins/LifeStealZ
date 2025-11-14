@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import com.zetaplugins.lifestealz.util.customitems.CustomItemManager;
 import org.bukkit.block.Crafter;
 import org.bukkit.event.EventHandler;
@@ -8,6 +9,7 @@ import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+@AutoRegisterListener
 public class CrafterCraftListener implements Listener {
     @EventHandler
     public void onCrafterCraft(CrafterCraftEvent event) {

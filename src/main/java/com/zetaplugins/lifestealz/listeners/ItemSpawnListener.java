@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.DESPAWNABLE_KEY;
 import static com.zetaplugins.lifestealz.util.customitems.CustomItemManager.INVULNERABLE_KEY;
 
+@AutoRegisterListener( name = "HahahaItemSpawnListenerLol")
 public class ItemSpawnListener implements Listener {
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {

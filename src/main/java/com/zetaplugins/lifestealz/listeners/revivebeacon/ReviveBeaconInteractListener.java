@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.listeners.revivebeacon;
 
+import com.zetaplugins.lifestealz.annotations.AutoRegisterListener;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import com.zetaplugins.lifestealz.util.MessageUtils;
 import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.customblocks.CustomBlock;
 
+@AutoRegisterListener
 public final class ReviveBeaconInteractListener implements Listener {
     private final LifeStealZ plugin;
 
