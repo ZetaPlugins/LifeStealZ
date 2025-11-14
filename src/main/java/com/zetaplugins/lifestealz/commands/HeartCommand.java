@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.commands;
 
+import com.zetaplugins.zetacore.annotations.AutoRegisterCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -15,6 +16,7 @@ import com.zetaplugins.lifestealz.storage.PlayerData;
 
 import java.util.List;
 
+@AutoRegisterCommand(command = "hearts")
 public final class HeartCommand implements CommandExecutor, TabCompleter {
     private final LifeStealZ plugin;
 

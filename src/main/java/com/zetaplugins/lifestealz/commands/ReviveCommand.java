@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.commands;
 
+import com.zetaplugins.zetacore.annotations.AutoRegisterCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@AutoRegisterCommand(command = "revive")
 public final class ReviveCommand implements CommandExecutor, TabCompleter {
     private final LifeStealZ plugin;
 

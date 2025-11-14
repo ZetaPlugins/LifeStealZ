@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.commands;
 
+import com.zetaplugins.zetacore.annotations.AutoRegisterCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,6 +19,7 @@ import com.zetaplugins.lifestealz.storage.PlayerData;
 
 import java.util.List;
 
+@AutoRegisterCommand(command = "eliminate")
 public final class EliminateCommand implements CommandExecutor, TabCompleter {
     private final LifeStealZ plugin;
 

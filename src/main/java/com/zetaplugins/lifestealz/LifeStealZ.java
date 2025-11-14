@@ -1,12 +1,11 @@
 package com.zetaplugins.lifestealz;
 
 import com.zetaplugins.lifestealz.util.*;
-import com.zetaplugins.lifestealz.util.revive.ReviveTask;
 import com.zetaplugins.lifestealz.util.revive.ReviveTaskManager;
 import com.zetaplugins.zetacore.ZetaCorePlugin;
+import com.zetaplugins.zetacore.services.commands.AutoCommandRegistrar;
 import com.zetaplugins.zetacore.services.events.AutoEventRegistrar;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ import com.zetaplugins.lifestealz.api.LifeStealZAPI;
 import com.zetaplugins.lifestealz.api.LifeStealZAPIImpl;
 import com.zetaplugins.lifestealz.caches.EliminatedPlayersCache;
 import com.zetaplugins.lifestealz.caches.OfflinePlayerCache;
-import com.zetaplugins.lifestealz.util.commands.CommandManager;
 import com.zetaplugins.lifestealz.util.customblocks.ReviveBeaconEffectManager;
 import com.zetaplugins.lifestealz.util.customitems.recipe.RecipeManager;
 import com.zetaplugins.lifestealz.util.geysermc.GeyserManager;
@@ -27,6 +25,7 @@ import com.zetaplugins.lifestealz.storage.SQLiteStorage;
 import com.zetaplugins.lifestealz.util.worldguard.WorldGuardManager;
 
 import java.io.File;
+import java.util.List;
 
 public final class LifeStealZ extends ZetaCorePlugin {
     private static final String PACKAGE_PREFIX = "com.zetaplugins.lifestealz";
@@ -102,9 +101,10 @@ public final class LifeStealZ extends ZetaCorePlugin {
         eliminatedPlayersCache = new EliminatedPlayersCache(this);
         offlinePlayerCache = new OfflinePlayerCache(this);
 
-        new CommandManager(this).registerCommands();
+        List<String> registeredCommands = new AutoCommandRegistrar(this, PACKAGE_PREFIX).registerAllCommands();
+        getLogger().info("Registered " + registeredCommands.size() + " commands");
 
-        var registeredEvents = new AutoEventRegistrar(this, PACKAGE_PREFIX).registerAllListeners();
+        List<String> registeredEvents = new AutoEventRegistrar(this, PACKAGE_PREFIX).registerAllListeners();
         getLogger().info("Registered " + registeredEvents.size() + " event listeners");
 
         initializeBStats();

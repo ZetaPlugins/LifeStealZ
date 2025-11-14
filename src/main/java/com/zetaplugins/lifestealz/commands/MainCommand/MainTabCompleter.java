@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.commands.MainCommand;
 
+import com.zetaplugins.zetacore.annotations.AutoRegisterTabCompleter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static com.zetaplugins.lifestealz.util.commands.CommandUtils.*;
 
+@AutoRegisterTabCompleter(command = "lifestealz")
 public final class MainTabCompleter implements TabCompleter {
     private final LifeStealZ plugin;
 

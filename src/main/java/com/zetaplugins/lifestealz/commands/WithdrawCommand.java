@@ -1,5 +1,6 @@
 package com.zetaplugins.lifestealz.commands;
 
+import com.zetaplugins.zetacore.annotations.AutoRegisterCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -19,6 +20,7 @@ import com.zetaplugins.lifestealz.storage.PlayerData;
 
 import java.util.List;
 
+@AutoRegisterCommand(command = "withdrawheart")
 public final class WithdrawCommand implements CommandExecutor, TabCompleter {
     private final LifeStealZ plugin;
 
