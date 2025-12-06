@@ -131,7 +131,7 @@ public final class PlayerDeathListener implements Listener {
         }
 
         if (playerData.getMaxHealth() - healthToLoose <= minHearts) {
-            handleElimination(event, player, playerData, killer, isDeathByPlayer);
+            handleElimination(event, player, playerData, killer, isDeathByPlayer, healthToLoose, preventKillerGain, droppedAtKiller);
             return;
         }
 
@@ -250,7 +250,7 @@ public final class PlayerDeathListener implements Listener {
         }
     }
 
-    private void handleElimination(PlayerDeathEvent event, Player player, PlayerData playerData, Player killer, boolean isDeathByPlayer) {
+    private void handleElimination(PlayerDeathEvent event, Player player, PlayerData playerData, Player killer, boolean isDeathByPlayer, double healthToLoose, boolean preventKillerGain, boolean droppedAtKiller) {
         ZPlayerEliminationEvent eliminationEvent =
                 new ZPlayerEliminationEvent(event, killer);
         eliminationEvent.setShouldBanPlayer(!plugin.getConfig().getBoolean("disablePlayerBanOnElimination"));
@@ -285,6 +285,34 @@ public final class PlayerDeathListener implements Listener {
                     );
                 }
             }, 1L);
+
+            boolean heartRewardOnElimination = plugin.getConfig().getBoolean("heartRewardOnElimination", true);
+            if (heartRewardOnElimination) {
+                // Reward killer with hearts on elimination
+                if (isDeathByPlayer && killer != null) {
+                    boolean dropHeartsPlayer = plugin.getConfig().getBoolean("dropHeartsPlayer", true);
+                    if (!preventKillerGain && !droppedAtKiller && !dropHeartsPlayer) {
+                        boolean preventedByCooldown = handleHeartGainCooldown(event, player, killer, healthToLoose);
+                        boolean preventedByMax = false;
+                        if (!preventedByCooldown) {
+                            preventedByMax = handleMaxHeartsLimit(event, player, killer, healthToLoose);
+                        }
+                        if (!preventedByCooldown && !preventedByMax) {
+                            handleKillerHeartGainDirect(killer, healthToLoose);
+                        }
+                    } else {
+                        if (droppedAtKiller || dropHeartsPlayer) {
+                            dropHeartsNaturally(killer.getLocation(), (int) (healthToLoose / 2), CustomItemManager.createKillHeart());
+                        }
+                    }
+                } else if (!isDeathByPlayer) {
+                    // Natural death eliminations also drop hearts if enabled
+                    boolean dropHeartsNatural = plugin.getConfig().getBoolean("dropHeartsNatural", true);
+                    if (dropHeartsNatural) {
+                        dropHeartsNaturally(player.getLocation(), (int) (healthToLoose / 2), CustomItemManager.createNaturalDeathHeart());
+                    }
+                }
+            }
 
             if (!eliminationEvent.isShouldBanPlayer()) {
                 // Respawn with revive hearts instead of elimination
