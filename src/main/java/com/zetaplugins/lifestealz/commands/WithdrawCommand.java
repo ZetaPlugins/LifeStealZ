@@ -103,9 +103,9 @@ public final class WithdrawCommand implements CommandExecutor, TabCompleter {
         }
 
         double resultingHealth = playerdata.getMaxHealth() - ((double) withdrawHearts * 2);
-        double minHealth = plugin.getConfig().getDouble("minHearts", 2.0) * 2; // Default to 2.0 if not set
+        double minHealth = plugin.getConfig().getDouble("minHearts", 0.0) * 2;
 
-        if (resultingHealth < minHealth) {
+        if (resultingHealth <= minHealth) {
             if (confirmOption == null || !confirmOption.equals("confirm")) {
                 sender.sendMessage(MessageUtils.getAndFormatMsg(
                         false,
