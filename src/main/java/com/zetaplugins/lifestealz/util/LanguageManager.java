@@ -10,7 +10,7 @@ import java.util.List;
 
 public final class LanguageManager {
     private final JavaPlugin plugin;
-    public static final List<String> defaultLangs = List.of("cs-CZ", "de-DE", "en-US", "es-ES", "fr-FR", "pl-PL", "vi-VN", "zh-CN", "nl-NL", "ru-RU", "pt-BR", "ja-JP", "hu-HU");
+    public static final List<String> defaultLangs = List.of("cs-CZ", "de-DE", "en-US", "es-ES", "fr-FR", "pl-PL", "vi-VN", "zh-CN", "nl-NL", "ru-RU", "pt-BR", "ja-JP", "hu-HU", "it-IT");
 
     private FileConfiguration langConfig;
 

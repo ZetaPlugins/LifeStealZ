@@ -20,7 +20,7 @@ checkForUpdates: true
 # Set the language to any code found in the "lang" folder (don't add the .yml extension)
 # You can add your own language files. Use https://github.com/KartoffelChipss/LifeStealZ/tree/main/src/main/resources/lang/en-US.yml as a template
 # If you want to help translating the plugin, please refer to this article: https://lsz.strassburger.dev/contributing/localization
-#  | en-US | de-DE | es-ES | fr-FR | cs-CZ | vi-VN | zh-CN | pl-PL | nl-NL | ru-RU
+#  | en-US | de-DE | es-ES | fr-FR | cs-CZ | vi-VN | zh-CN | pl-PL | nl-NL | ru-RU | it-IT
 lang: "en-US"
 
 
