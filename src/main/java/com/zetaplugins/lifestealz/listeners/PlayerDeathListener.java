@@ -301,14 +301,14 @@ public final class PlayerDeathListener implements Listener {
                             handleKillerHeartGainDirect(killer, healthToLoose);
                         }
                     } else {
-                        if (droppedAtKiller || dropHeartsPlayer) {
+                        if ((droppedAtKiller || dropHeartsPlayer) && !plugin.getConfig().getBoolean("noDropAfterMinHeart")) {
                             dropHeartsNaturally(killer.getLocation(), (int) (healthToLoose / 2), CustomItemManager.createKillHeart());
                         }
                     }
                 } else if (!isDeathByPlayer) {
                     // Natural death eliminations also drop hearts if enabled
                     boolean dropHeartsNatural = plugin.getConfig().getBoolean("dropHeartsNatural", true);
-                    if (dropHeartsNatural) {
+                    if (dropHeartsNatural && !plugin.getConfig().getBoolean("noDropAfterMinHeart")) {
                         dropHeartsNaturally(player.getLocation(), (int) (healthToLoose / 2), CustomItemManager.createNaturalDeathHeart());
                     }
                 }
