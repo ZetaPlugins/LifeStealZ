@@ -10,10 +10,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 
 public abstract class SQLStorage extends Storage {
     private static final String CSV_SEPARATOR = ",";
+    private final ConcurrentMap<UUID, PlayerData> playerDataCache = new ConcurrentHashMap<>();
 
     public SQLStorage(LifeStealZ plugin) {
         super(plugin);
@@ -54,6 +57,11 @@ public abstract class SQLStorage extends Storage {
 
     @Override
     public PlayerData load(UUID uuid) {
+        PlayerData cachedPlayerData = playerDataCache.get(uuid);
+        if (cachedPlayerData != null) {
+            return cachedPlayerData;
+        }
+
         final String sql = "SELECT * FROM hearts WHERE uuid = ?";
 
         try (Connection connection = getConnection()) {
@@ -70,10 +78,13 @@ public abstract class SQLStorage extends Storage {
                         if (player == null) return null;
                         PlayerData newPlayerData = new PlayerData(player.getName(), uuid);
                         save(newPlayerData);
+                        cachePlayerData(newPlayerData);
                         return newPlayerData;
                     }
 
-                    return mapResultSetToPlayerData(resultSet, uuid);
+                    PlayerData playerData = mapResultSetToPlayerData(resultSet, uuid);
+                    cachePlayerData(playerData);
+                    return playerData;
                 } catch (SQLException e) {
                     getPlugin().getLogger().log(Level.SEVERE, "Failed to load player data from SQL database:", e);
                     return null;
@@ -103,21 +114,43 @@ public abstract class SQLStorage extends Storage {
     @Override
     public void save(PlayerData playerData) {
         // This uses standard SQL syntax to work with all SQL databases, but may not be optimal for all (e.g. H2 or MySQL)
-        if (!playerData.hasChanges()) return;
+        if (!playerData.hasChanges()) {
+            cachePlayerData(playerData);
+            return;
+        }
 
         try (Connection connection = getConnection()) {
             if (connection == null) return;
 
             boolean exists = checkIfEntryExists(connection, playerData.getUuid());
 
+            boolean saved;
             if (exists) {
-                updatePlayerData(connection, playerData);
+                saved = updatePlayerData(connection, playerData);
             } else {
-                insertPlayerData(connection, playerData);
+                saved = insertPlayerData(connection, playerData);
+            }
+
+            if (saved) {
+                cachePlayerData(playerData);
             }
         } catch (SQLException e) {
             getPlugin().getLogger().log(Level.SEVERE, "Failed to save player data:", e);
         }
+    }
+
+    protected void cachePlayerData(PlayerData playerData) {
+        if (playerData == null) return;
+
+        try {
+            playerDataCache.put(UUID.fromString(playerData.getUuid()), playerData);
+        } catch (IllegalArgumentException e) {
+            getPlugin().getLogger().log(Level.WARNING, "Failed to cache player data with invalid UUID: " + playerData.getUuid(), e);
+        }
+    }
+
+    protected void clearPlayerDataCache() {
+        playerDataCache.clear();
     }
 
     /**
@@ -340,6 +373,7 @@ public abstract class SQLStorage extends Storage {
                 statement.executeBatch();
 
                 connection.commit();
+                clearPlayerDataCache();
 
                 long endTime = System.currentTimeMillis();
                 getPlugin().getLogger().info("Imported " + totalRows + " player data entries in " + (endTime - startTime) + "ms");
@@ -378,6 +412,9 @@ public abstract class SQLStorage extends Storage {
                 }
 
                 affectedPlayers = pstmt.executeUpdate();
+                if (affectedPlayers > 0) {
+                    clearPlayerDataCache();
+                }
             } catch (SQLException e) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to revive all players in SQL database:", e);
             }
@@ -445,6 +482,7 @@ public abstract class SQLStorage extends Storage {
 
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("DELETE FROM hearts");
+                clearPlayerDataCache();
             } catch (SQLException e) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to clear SQL database:", e);
             }

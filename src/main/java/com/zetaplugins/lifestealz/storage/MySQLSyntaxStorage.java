@@ -44,6 +44,7 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
                 stmt.executeUpdate();
 
                 playerData.clearModifiedFields();
+                cachePlayerData(playerData);
             } catch (SQLException e) {
                 getPlugin().getLogger().severe("Failed to save player data to database: " + e.getMessage());
             }
