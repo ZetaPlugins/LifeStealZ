@@ -115,6 +115,11 @@ public final class GracePeriodManager {
         if (!isEnabled()) return;
         if (player.getPersistentDataContainer().has(GRACE_ENDED)) return;
 
+        // Decrementing illusioner kill stat
+        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) > 8096) {
+            player.decrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
+        }
+
         if (getConfig().shouldAnnounce()) {
             Component endMessage = MessageUtils.getAndFormatMsg(
                     true,
