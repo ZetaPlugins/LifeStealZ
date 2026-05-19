@@ -119,7 +119,7 @@ public final class GracePeriodManager {
         if (player.getPersistentDataContainer().has(GRACE_ENDED)) return;
 
         // Decrementing illusioner kill stat
-        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) > 8096) {
+        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) >= 8096) {
             player.decrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
         }
 
