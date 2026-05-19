@@ -152,8 +152,12 @@ public final class GracePeriodManager {
     public boolean skipGracePeriod(OfflinePlayer player) {
         if (!isEnabled()) return false;
         if (!isInGracePeriod(player)) return false;
-
-        player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
+        
+        if (player.isOnline()) {
+            endGracePeriod(player.getPlayer());
+        } else {
+            player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
+        }
 
         for (String command : getConfig().getEndCommands()) {
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
