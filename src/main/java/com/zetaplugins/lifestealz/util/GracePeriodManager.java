@@ -81,6 +81,7 @@ public final class GracePeriodManager {
         // Duration in ticks: 20 ticks = 1 second
         final long gracePeriodDuration = (long) getConfig().getDuration() * 20;
 
+        // TODO: Needs to handle when the server/player goes offline
         new BukkitRunnable() {
             @Override
             public void run() {
