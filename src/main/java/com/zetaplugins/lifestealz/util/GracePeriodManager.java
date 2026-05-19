@@ -60,7 +60,7 @@ public final class GracePeriodManager {
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
         long elapsed;
-        if (getConfig().shoudRunOffline()) {
+        if (getConfig().shouldRunOffline()) {
             PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
             if (playerData == null) return Optional.empty();
 
@@ -188,7 +188,7 @@ public final class GracePeriodManager {
             return plugin.getConfig().getBoolean("gracePeriod.enabled");
         }
 
-        public boolean shoudRunOffline() {
+        public boolean shouldRunOffline() {
             return plugin.getConfig().getBoolean("gracePerion.runOffline");
         }
 
