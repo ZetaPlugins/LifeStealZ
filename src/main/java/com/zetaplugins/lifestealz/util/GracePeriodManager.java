@@ -59,17 +59,20 @@ public final class GracePeriodManager {
 
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
+        long offset = 0;
+        PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
+        if (playerData != null) {
+            offset = playerData.getGraceOffset();
+        }
+
         long elapsed;
         if (getConfig().shouldRunOffline()) {
-            PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-            if (playerData == null) return Optional.empty();
-
-            elapsed = (System.currentTimeMillis() - playerData.getFirstJoin());
+            elapsed = (System.currentTimeMillis() - player.getFirstPlayed());
         } else {
             elapsed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50;
         }
 
-        long remaining = gracePeriodDuration - elapsed;
+        long remaining = gracePeriodDuration + offset - elapsed;
 
         return remaining < 0 ? Optional.empty() : Optional.of((int) (remaining / 1000));
     }
@@ -171,7 +174,7 @@ public final class GracePeriodManager {
         PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
         if (playerData == null) return false;
 
-        playerData.setFirstJoin(System.currentTimeMillis());
+        playerData.setGraceOffset(System.currentTimeMillis());
         plugin.getStorage().save(playerData);
 
         for (String command : getConfig().getStartCommands()) {
