@@ -133,7 +133,7 @@ public final class DevSubCommand implements SubCommand {
 
     @Override
     public String getUsage() {
-        return "/lifestealz dev <giveForbiddenitem | isInGracePeriod | setFirstJoinDate | refreshCaches | crash | cleardatabase | giveAnimationTotem | getEffectivePerms>";
+        return "/lifestealz dev <giveForbiddenitem | isInGracePeriod | setGraceOffset | refreshCaches | crash | cleardatabase | giveAnimationTotem | getEffectivePerms>";
     }
 
     @Override

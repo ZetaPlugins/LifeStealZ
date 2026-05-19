@@ -26,17 +26,28 @@ public final class SQLiteStorage extends SQLStorage {
                 ResultSet resultSet = statement.executeQuery("PRAGMA table_info(hearts)")
         ) {
             boolean hasFirstJoin = false;
+            boolean hasGraceOffset = false;
 
             while (resultSet.next()) {
                 if ("firstJoin".equalsIgnoreCase(resultSet.getString("name"))) {
                     hasFirstJoin = true;
-                    break;
+                    continue;
+                }
+
+                if ("graceOffset".equalsIgnoreCase(resultSet.getString("name"))) {
+                    hasGraceOffset = true;
+                    continue;
                 }
             }
 
-            if (!hasFirstJoin) {
-                getPlugin().getLogger().info("Adding 'firstJoin' column to 'hearts' table.");
-                statement.executeUpdate("ALTER TABLE hearts ADD COLUMN firstJoin INTEGER DEFAULT 0");
+            if (hasFirstJoin) {
+                getPlugin().getLogger().info("Removing 'firstJoin' column from 'hearts' table.");
+                statement.executeUpdate("ALTER TABLE hearts DROP COLUMN firstJoin");
+            }
+
+            if (!hasGraceOffset) {
+                getPlugin().getLogger().info("Adding 'graceOffset' column to 'hearts' table.");
+                statement.executeUpdate("ALTER TABLE hearts ADD COLUMN graceOffset BIGINT DEFAULT 0");
             }
         } catch (SQLException e) {
             getPlugin().getLogger().log(Level.SEVERE, "Failed to migrate database: ", e);
@@ -50,7 +61,7 @@ public final class SQLiteStorage extends SQLStorage {
 
     @Override
     protected String getInserOrReplaceStatement() {
-        return "INSERT OR REPLACE INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, firstJoin) " +
+        return "INSERT OR REPLACE INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, graceOffset) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     }
 }

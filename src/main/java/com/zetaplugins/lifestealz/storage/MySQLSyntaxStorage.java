@@ -16,7 +16,7 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
 
     @Override
     public void save(PlayerData playerData) {
-        String insertOrUpdateQuery = "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, firstJoin) " +
+        String insertOrUpdateQuery = "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, graceOffset) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), " +
@@ -25,7 +25,7 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
                 "craftedHearts = VALUES(craftedHearts), " +
                 "craftedRevives = VALUES(craftedRevives), " +
                 "killedOtherPlayers = VALUES(killedOtherPlayers), " +
-                "firstJoin = VALUES(firstJoin)";
+                "graceOffset = VALUES(graceOffset)";
 
         try (Connection connection = getConnection()) {
             if (connection == null) return;
@@ -39,7 +39,7 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
                 stmt.setInt(5, playerData.getCraftedHearts());
                 stmt.setInt(6, playerData.getCraftedRevives());
                 stmt.setInt(7, playerData.getKilledOtherPlayers());
-                stmt.setLong(8, playerData.getFirstJoin());
+                stmt.setLong(8, playerData.getGraceOffset());
 
                 stmt.executeUpdate();
 
@@ -54,7 +54,7 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
 
     @Override
     protected String getInserOrReplaceStatement() {
-        return "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, firstJoin) " +
+        return "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, graceOffset) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), " +
@@ -63,6 +63,6 @@ public abstract class MySQLSyntaxStorage extends SQLStorage {
                 "craftedHearts = VALUES(craftedHearts), " +
                 "craftedRevives = VALUES(craftedRevives), " +
                 "killedOtherPlayers = VALUES(killedOtherPlayers), " +
-                "firstJoin = VALUES(firstJoin)";
+                "graceOffset = VALUES(graceOffset)";
     }
 }

@@ -68,7 +68,7 @@ public final class MainTabCompleter implements TabCompleter {
             case "debug":
                 return getDisplayOptions(List.of("upload", "generate"), input);
             case "dev":
-                return getDisplayOptions(List.of("giveForbiddenitem", "isInGracePeriod", "setFirstJoinDate", "refreshCaches", "crash", "cleardatabase", "giveAnimationTotem", "getEffectivePerms"), input);
+                return getDisplayOptions(List.of("giveForbiddenitem", "isInGracePeriod", "setGraceOffset", "refreshCaches", "crash", "cleardatabase", "giveAnimationTotem", "getEffectivePerms"), input);
         }
         return List.of();
     }
