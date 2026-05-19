@@ -252,7 +252,7 @@ public final class GracePeriodManager {
         }
 
         public boolean shouldRunOffline() {
-            return plugin.getConfig().getBoolean("gracePerion.runOffline");
+            return plugin.getConfig().getBoolean("gracePeriod.runOffline");
         }
 
         public int getDuration() {
