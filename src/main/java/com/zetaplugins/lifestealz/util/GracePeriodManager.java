@@ -107,6 +107,7 @@ public final class GracePeriodManager {
      */
     public void endGracePeriod(Player player) {
         if (!isEnabled()) return;
+        if (player.getPersistentDataContainer().has(GRACE_ENDED)) return;
 
         if (getConfig().shouldAnnounce()) {
             Component endMessage = MessageUtils.getAndFormatMsg(
