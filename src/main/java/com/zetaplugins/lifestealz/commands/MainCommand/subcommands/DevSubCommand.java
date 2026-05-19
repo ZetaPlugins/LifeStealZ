@@ -65,7 +65,7 @@ public final class DevSubCommand implements SubCommand {
             sender.sendMessage(MessageUtils.formatMsg(
                     "&7Is &c" + player.getName() + " &7in grace period? "
                             + gracePeriodColor + gracePeriodManager.isInGracePeriod(player)
-                            + (gracePeriodManager.isInGracePeriod(player) ? " &7(" + gracePeriodManager.getGracePeriodRemaining(player).orElse(-1) + "remaining)" : "")
+                            + (gracePeriodManager.isInGracePeriod(player) ? " &7(" + gracePeriodManager.getGracePeriodRemaining(player).orElse(0) + "s remaining)" : "")
                             + "\n&7Grace period enabled: " + gracePeriodEnabledColor + gracePeriodManager.isEnabled() + "&7"
             ));
         }
