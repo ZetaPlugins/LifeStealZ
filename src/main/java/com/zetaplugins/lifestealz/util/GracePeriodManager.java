@@ -1,6 +1,7 @@
 package com.zetaplugins.lifestealz.util;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
@@ -13,6 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 public final class GracePeriodManager {
+    // A tag attached to the player if their grace period has been skipped
+    private static final NamespacedKey GRACE_SKIPPED = new NamespacedKey("lifestealz", "grace_skipped");
+
+    // A tag attached to the player when their grace period is ended
+    private static final NamespacedKey GRACE_ENDED = new NamespacedKey("lifestealz", "grace_ended");
+
     private final LifeStealZ plugin;
 
     public GracePeriodManager(LifeStealZ plugin) {
