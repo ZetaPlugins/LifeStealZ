@@ -35,15 +35,10 @@ public final class GracePeriodManager {
     public boolean isInGracePeriod(OfflinePlayer player) {
         if (!isEnabled()) return false;
 
-        PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
+        Optional<Integer> remaining = getGracePeriodRemaining(player);
 
-        if (playerData == null) return false;
-
-        long firstJoin = playerData.getFirstJoin();
-        final long now = System.currentTimeMillis();
-        final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
-
-        return now - firstJoin < gracePeriodDuration;
+        if (!remaining.isPresent()) return false;
+        return remaining.get() != 0;
     }
 
     /**
@@ -51,7 +46,7 @@ public final class GracePeriodManager {
      * @param player The player to get the grace period remaining time for.
      * @return The remaining time of the grace period in seconds.
      */
-    public Optional<Integer> getGracePeriodRemaining(Player player) {
+    public Optional<Integer> getGracePeriodRemaining(OfflinePlayer player) {
         if (!isEnabled()) return Optional.empty();
 
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
