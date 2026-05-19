@@ -74,6 +74,10 @@ public final class GracePeriodManager {
         return remaining < 0 ? Optional.empty() : Optional.of((int) (remaining / 1000));
     }
 
+    public boolean hasEndedTag(OfflinePlayer player) {
+        return player.getPersistentDataContainer().has(GRACE_ENDED);
+    }
+
     /**
      * Sends the player a message and executes commands when the grace period starts.
      * @param player The player to start the grace period for.
