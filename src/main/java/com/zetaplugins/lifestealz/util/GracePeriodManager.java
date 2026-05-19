@@ -55,6 +55,8 @@ public final class GracePeriodManager {
      */
     public Optional<Integer> getGracePeriodRemaining(OfflinePlayer player) {
         if (!isEnabled()) return Optional.empty();
+        if (player.getPersistentDataContainer().has(GRACE_ENDED)) return Optional.empty();
+        if (player.getPersistentDataContainer().has(GRACE_SKIPPED)) return Optional.empty();
 
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
