@@ -59,7 +59,6 @@ public final class PlayerJoinListener implements Listener {
         PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
         if (playerData == null) {
             playerData = new PlayerData(player.getName(), player.getUniqueId());
-            playerData.setFirstJoin(System.currentTimeMillis());
             playerData.setMaxHealth(startHearts * 2.0);
             storage.save(playerData);
             plugin.getGracePeriodManager().startGracePeriod(player);
