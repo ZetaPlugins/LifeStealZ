@@ -171,6 +171,10 @@ public final class GracePeriodManager {
             return plugin.getConfig().getBoolean("gracePeriod.enabled");
         }
 
+        public boolean shoudRunOffline() {
+            return plugin.getConfig().getBoolean("gracePerion.runOffline");
+        }
+
         public int getDuration() {
             return plugin.getConfig().getInt("gracePeriod.duration");
         }
