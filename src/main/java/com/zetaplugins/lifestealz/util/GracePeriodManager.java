@@ -71,7 +71,7 @@ public final class GracePeriodManager {
 
         long remaining = gracePeriodDuration - elapsed;
 
-        return remaining < 0 ? Optional.empty() : Optional.of((int) (remaining));
+        return remaining < 0 ? Optional.empty() : Optional.of((int) (remaining / 1000));
     }
 
     /**
