@@ -1,6 +1,7 @@
 package com.zetaplugins.lifestealz.commands.MainCommand.subcommands;
 
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.zetaplugins.lifestealz.LifeStealZ;
@@ -82,10 +83,16 @@ public final class DevSubCommand implements SubCommand {
                 return false;
             }
 
-            final long graceOffset = System.currentTimeMillis();
-
             PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-            playerData.setGraceOffset(graceOffset);
+
+            long elapsed;
+            if (plugin.getGracePeriodManager().getConfig().shouldRunOffline()) {
+                elapsed = (System.currentTimeMillis() - player.getFirstPlayed());
+            } else {
+                elapsed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50;
+            }
+            
+            playerData.setGraceOffset(elapsed);
             plugin.getStorage().save(playerData);
             plugin.getGracePeriodManager().startGracePeriod(player);
         }

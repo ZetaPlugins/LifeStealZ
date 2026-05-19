@@ -223,7 +223,13 @@ public final class GracePeriodManager {
         PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
         if (playerData == null) return false;
 
-        playerData.setGraceOffset(System.currentTimeMillis());
+        long elapsed;
+        if (getConfig().shouldRunOffline()) {
+            elapsed = (System.currentTimeMillis() - player.getFirstPlayed());
+        } else {
+            elapsed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50;
+        }
+        playerData.setGraceOffset(elapsed);
         plugin.getStorage().save(playerData);
 
         for (String command : getConfig().getStartCommands()) {
