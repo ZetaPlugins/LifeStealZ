@@ -70,22 +70,22 @@ public final class DevSubCommand implements SubCommand {
             ));
         }
 
-        if (optionTwo.equals("setFirstJoinDate")) {
+        if (optionTwo.equals("setGraceOffset")) {
             if (args.length < 3 && !(sender instanceof Player)) {
-                throwUsageError(sender, "/lifestealz dev setFirstJoinDate [player]");
+                throwUsageError(sender, "/lifestealz dev setGraceOffset [player]");
                 return false;
             }
 
             Player player = args.length > 2 ? plugin.getServer().getPlayer(args[2]) : (Player) sender;
             if (player == null) {
-                throwUsageError(sender, "/lifestealz dev setFirstJoinDate [player]");
+                throwUsageError(sender, "/lifestealz dev setGraceOffset [player]");
                 return false;
             }
 
-            final long newFirstJoin = System.currentTimeMillis();
+            final long graceOffset = System.currentTimeMillis();
 
             PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-            playerData.setFirstJoin(newFirstJoin);
+            playerData.setGraceOffset(graceOffset);
             plugin.getStorage().save(playerData);
             plugin.getGracePeriodManager().startGracePeriod(player);
         }
