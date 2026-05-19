@@ -33,12 +33,20 @@ public final class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (gracePeriodManager.isEnabled() && !gracePeriodManager.hasEndedTag(player)) {
-            // Returns 0 only when the timer has run out or if the grace period has been skipped
-            int remaining = gracePeriodManager.getGracePeriodRemaining(player).orElse(0);
+        if (gracePeriodManager.isEnabled()) {
+            // Removing all tags if the player was reset
+            if (gracePeriodManager.wasReset(player)) {
+                gracePeriodManager.removeResetMask(player);
+                player.getPersistentDataContainer().remove(GracePeriodManager.GRACE_ENDED);
+            }
+            
+            if (!gracePeriodManager.hasEndedTag(player)) {
+                // Returns 0 only when the timer has run out or if the grace period has been skipped
+                int remaining = gracePeriodManager.getGracePeriodRemaining(player).orElse(0);
 
-            // 0 * 20 = 0 so it's still immediate notification
-            gracePeriodManager.endGraceLater(player, remaining * 20);
+                // 0 * 20 = 0 so it's still immediate notification
+                gracePeriodManager.endGraceLater(player, remaining * 20);
+            }
         }
 
         Storage storage = plugin.getStorage();

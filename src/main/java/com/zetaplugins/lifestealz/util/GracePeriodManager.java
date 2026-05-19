@@ -17,7 +17,9 @@ import java.util.Optional;
 
 public final class GracePeriodManager {
     // A tag attached to the player when their grace period is ended
-    private static final NamespacedKey GRACE_ENDED = new NamespacedKey("lifestealz", "grace_ended");
+    public static final NamespacedKey GRACE_ENDED = new NamespacedKey("lifestealz", "grace_ended");
+    private static final int skippedBitMask = 0b10000000000;
+    private static final int resetBitMask = 0b100000000000;
 
     private final LifeStealZ plugin;
 
@@ -54,8 +56,10 @@ public final class GracePeriodManager {
      */
     public Optional<Integer> getGracePeriodRemaining(OfflinePlayer player) {
         if (!isEnabled()) return Optional.empty();
-        if (player.getPersistentDataContainer().has(GRACE_ENDED)) return Optional.empty();
-        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) >= 8096) return Optional.empty();
+        if (!wasReset(player)) {
+            if (player.getPersistentDataContainer().has(GRACE_ENDED)) return Optional.empty();
+            if (wasSkipped(player)) return Optional.empty();
+        }
 
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
@@ -79,6 +83,38 @@ public final class GracePeriodManager {
 
     public boolean hasEndedTag(OfflinePlayer player) {
         return player.getPersistentDataContainer().has(GRACE_ENDED);
+    }
+
+    public boolean wasSkipped(OfflinePlayer player) {
+        return (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) & skippedBitMask) != 0;
+    }
+
+    public boolean wasReset(OfflinePlayer player) {
+        return (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) & resetBitMask) != 0;
+    }
+
+    public void applySkipMask(OfflinePlayer player) {
+        if (wasSkipped(player)) return;
+        
+        player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, skippedBitMask);
+    }
+
+    public void applyResetMask(OfflinePlayer player) {
+        if (wasReset(player)) return;
+        
+        player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, resetBitMask);
+    }
+
+    public void removeSkipMask(OfflinePlayer player) {
+        if (!wasSkipped(player)) return;
+        
+        player.decrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, skippedBitMask);
+    }
+
+    public void removeResetMask(OfflinePlayer player) {
+        if (!wasReset(player)) return;
+        
+        player.decrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, resetBitMask);
     }
 
     /**
@@ -118,10 +154,7 @@ public final class GracePeriodManager {
         if (!isEnabled()) return;
         if (player.getPersistentDataContainer().has(GRACE_ENDED)) return;
 
-        // Decrementing illusioner kill stat
-        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) >= 8096) {
-            player.decrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
-        }
+        removeSkipMask(player);
 
         if (getConfig().shouldAnnounce()) {
             Component endMessage = MessageUtils.getAndFormatMsg(
@@ -153,10 +186,13 @@ public final class GracePeriodManager {
         if (!isEnabled()) return false;
         if (!isInGracePeriod(player)) return false;
         
+        // Removing the reset mask if it was set
+        removeResetMask(player);
+
         if (player.isOnline()) {
             endGracePeriod(player.getPlayer());
         } else {
-            player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
+            applySkipMask(player);
         }
 
         for (String command : getConfig().getEndCommands()) {
@@ -174,6 +210,15 @@ public final class GracePeriodManager {
      */
     public boolean resetGracePeriod(OfflinePlayer player) {
         if (!isEnabled()) return false;
+
+        removeSkipMask(player);
+
+        if (player.isOnline()) {
+            player.getPlayer().getPersistentDataContainer().remove(GRACE_ENDED);
+        } else {
+            applyResetMask(player);
+        }
+
 
         PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
         if (playerData == null) return false;
