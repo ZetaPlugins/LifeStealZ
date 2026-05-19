@@ -94,6 +94,8 @@ public final class GracePeriodManager {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (!player.isOnline()) return;
+
                 endGracePeriod(player);
             }
         }.runTaskLater(plugin, gracePeriodDuration);
