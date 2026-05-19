@@ -5,7 +5,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import com.zetaplugins.lifestealz.LifeStealZ;
 import com.zetaplugins.lifestealz.storage.PlayerData;
@@ -14,9 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 public final class GracePeriodManager {
-    // A tag attached to the player if their grace period has been skipped
-    private static final NamespacedKey GRACE_SKIPPED = new NamespacedKey("lifestealz", "grace_skipped");
-
     // A tag attached to the player when their grace period is ended
     private static final NamespacedKey GRACE_ENDED = new NamespacedKey("lifestealz", "grace_ended");
 
@@ -56,7 +55,7 @@ public final class GracePeriodManager {
     public Optional<Integer> getGracePeriodRemaining(OfflinePlayer player) {
         if (!isEnabled()) return Optional.empty();
         if (player.getPersistentDataContainer().has(GRACE_ENDED)) return Optional.empty();
-        if (player.getPersistentDataContainer().has(GRACE_SKIPPED)) return Optional.empty();
+        if (player.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER) >= 8096) return Optional.empty();
 
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
@@ -118,6 +117,8 @@ public final class GracePeriodManager {
             player.sendMessage(endMessage);
         }
 
+        player.getPersistentDataContainer().set(GRACE_ENDED, PersistentDataType.BOOLEAN, true);
+
         if (getConfig().shouldPlaySound()) {
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 500.0f, 1.0f);
         }
@@ -137,11 +138,7 @@ public final class GracePeriodManager {
         if (!isEnabled()) return false;
         if (!isInGracePeriod(player)) return false;
 
-        PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-        if (playerData == null) return false;
-
-        playerData.setFirstJoin(System.currentTimeMillis() - getConfig().getDuration() * 1000L);// Subtract the duration of the grace period
-        plugin.getStorage().save(playerData);
+        player.incrementStatistic(Statistic.ENTITY_KILLED_BY, EntityType.ILLUSIONER, 8096);
 
         for (String command : getConfig().getEndCommands()) {
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
