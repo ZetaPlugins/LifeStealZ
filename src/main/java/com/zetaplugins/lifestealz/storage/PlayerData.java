@@ -12,7 +12,7 @@ public class PlayerData {
     private int craftedRevives;
     private int hasBeenRevived;
     private int killedOtherPlayers;
-    private long firstJoin;
+    private long graceOffset;
 
     private final Set<String> modifiedFields = new HashSet<>(); // Track modified fields
 
@@ -84,14 +84,14 @@ public class PlayerData {
         }
     }
 
-    public long getFirstJoin() {
-        return firstJoin;
+    public long getGraceOffset() {
+        return graceOffset;
     }
 
-    public void setFirstJoin(long firstJoin) {
-        if (this.firstJoin != firstJoin) {
-            this.firstJoin = firstJoin;
-            modifiedFields.add("firstJoin");
+    public void setGraceOffset(long graceOffset) {
+        if (this.graceOffset != graceOffset) {
+            this.graceOffset = graceOffset;
+            modifiedFields.add("graceOffset");
         }
     }
 
