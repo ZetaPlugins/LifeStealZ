@@ -3,6 +3,7 @@ package com.zetaplugins.lifestealz.util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import com.zetaplugins.lifestealz.LifeStealZ;
@@ -53,15 +54,19 @@ public final class GracePeriodManager {
     public Optional<Integer> getGracePeriodRemaining(Player player) {
         if (!isEnabled()) return Optional.empty();
 
-        PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-
-        if (playerData == null) return Optional.empty();
-
-        long firstJoin = playerData.getFirstJoin();
-        final long now = System.currentTimeMillis();
         final long gracePeriodDuration = (long) getConfig().getDuration() * 1000;
 
-        long remaining = gracePeriodDuration - (now - firstJoin);
+        long elapsed;
+        if (getConfig().shoudRunOffline()) {
+            PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
+            if (playerData == null) return Optional.empty();
+
+            elapsed = (System.currentTimeMillis() - playerData.getFirstJoin());
+        } else {
+            elapsed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50;
+        }
+
+        long remaining = gracePeriodDuration - elapsed;
 
         return remaining < 0 ? Optional.empty() : Optional.of((int) (remaining));
     }
