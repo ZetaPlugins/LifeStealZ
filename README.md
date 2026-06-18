@@ -1,4 +1,4 @@
-![LifeStealZ Banner](https://file.strassburger.dev/LifeStealZ_banner_new_2.png)
+![LifeStealZ Banner](https://wsrv.nl/?url=https%3A%2F%2Ffile.strassburger.dev%2FLifeStealZ_banner_new_2.png&n=-1)
 
 ---
 
