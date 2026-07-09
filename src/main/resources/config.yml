@@ -71,6 +71,10 @@ dropHeartsIfMax: true
 looseHeartsToNature: true
 # If a player should lose a heart, when being killed by another player
 looseHeartsToPlayer: true
+# If a player should lose a heart, when dying to nature (hostile mobs, lava, etc), while the player is naked
+loseHeartsToNatureWhileNaked: true
+# If a player should lose a heart, when being killed by another player, while the player is naked
+loseHeartsToPlayerWhileNaked: true
 # Whether it should be announced, when a player got eliminated (has no more hearts)
 announceElimination: true
 
