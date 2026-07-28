@@ -1,4 +1,4 @@
-![LifeStealZ Banner](https://file.strassburger.dev/LifeStealZ_banner_new_2.png)
+<img width="900" height="300" alt="LifeStealZ Banner" src="https://github.com/user-attachments/assets/e231ef9c-0f5e-46d3-a86e-44b8e42ccc52" />
 
 ---
 
