@@ -352,10 +352,20 @@ public final class PlayerDeathListener implements Listener {
 
     private void handleKillerHeartGainDirect(Player killer, double healthGain) {
         PlayerData killerPlayerData = plugin.getStorage().load(killer.getUniqueId());
-        killerPlayerData.setMaxHealth(killerPlayerData.getMaxHealth() + healthGain);
+
+        // Store max health increase.
+        double newMaxHealth = killerPlayerData.getMaxHealth() + healthGain;
+        killerPlayerData.setMaxHealth(newMaxHealth);
         plugin.getStorage().save(killerPlayerData);
-        LifeStealZ.setMaxHealth(killer, killerPlayerData.getMaxHealth());
-        killer.setHealth(Math.min(killer.getHealth() + healthGain, killerPlayerData.getMaxHealth()));
+
+        // Set max health increase.
+        LifeStealZ.setMaxHealth(killer, newMaxHealth);
+
+        // Heal an alive killer only.
+        if (!killer.isDead() && killer.getHealth() > 0.0) {
+            killer.setHealth(Math.min(killer.getHealth() + healthGain, newMaxHealth));
+        }
+
         CooldownManager.lastHeartGain.put(killer.getUniqueId(), System.currentTimeMillis());
     }
 
