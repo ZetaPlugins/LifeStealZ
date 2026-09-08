@@ -33,7 +33,7 @@ public abstract class SQLStorage extends Storage {
                         .append("craftedHearts SMALLINT UNSIGNED NOT NULL DEFAULT 0, ")
                         .append("craftedRevives SMALLINT UNSIGNED NOT NULL DEFAULT 0, ")
                         .append("killedOtherPlayers MEDIUMINT UNSIGNED NOT NULL DEFAULT 0, ")
-                        .append("firstJoin BIGINT UNSIGNED NOT NULL")
+                        .append("graceOffset BIGINT UNSIGNED NOT NULL")
                         .append(");");
                 statement.executeUpdate(sql.toString());
 
@@ -95,7 +95,7 @@ public abstract class SQLStorage extends Storage {
         playerData.setCraftedHearts(resultSet.getInt("craftedHearts"));
         playerData.setCraftedRevives(resultSet.getInt("craftedRevives"));
         playerData.setKilledOtherPlayers(resultSet.getInt("killedOtherPlayers"));
-        playerData.setFirstJoin(resultSet.getLong("firstJoin"));
+        playerData.setGraceOffset(resultSet.getLong("graceOffset"));
         playerData.clearModifiedFields();
         return playerData;
     }
@@ -147,7 +147,7 @@ public abstract class SQLStorage extends Storage {
      * @return True if the insert was successful, false otherwise
      */
     private boolean insertPlayerData(Connection connection, PlayerData playerData) {
-        final String insertQuery = "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, firstJoin) " +
+        final String insertQuery = "INSERT INTO hearts (uuid, name, maxhp, hasbeenRevived, craftedHearts, craftedRevives, killedOtherPlayers, graceOffset) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
@@ -158,7 +158,7 @@ public abstract class SQLStorage extends Storage {
             insertStmt.setInt(5, playerData.getCraftedHearts());
             insertStmt.setInt(6, playerData.getCraftedRevives());
             insertStmt.setInt(7, playerData.getKilledOtherPlayers());
-            insertStmt.setLong(8, playerData.getFirstJoin());
+            insertStmt.setLong(8, playerData.getGraceOffset());
             insertStmt.executeUpdate();
 
             playerData.clearModifiedFields();
@@ -198,8 +198,8 @@ public abstract class SQLStorage extends Storage {
                 case "killedOtherPlayers":
                     params.add(playerData.getKilledOtherPlayers());
                     break;
-                case "firstJoin":
-                    params.add(playerData.getFirstJoin());
+                case "graceOffset":
+                    params.add(playerData.getGraceOffset());
                     break;
             }
         }
@@ -273,7 +273,7 @@ public abstract class SQLStorage extends Storage {
                                 resultSet.getInt("craftedHearts") + CSV_SEPARATOR +
                                 resultSet.getInt("craftedRevives") + CSV_SEPARATOR +
                                 resultSet.getInt("killedOtherPlayers") + CSV_SEPARATOR +
-                                resultSet.getLong("firstJoin");
+                                resultSet.getLong("graceOffset");
                         writer.write(line);
                         writer.newLine();
                     }
@@ -326,7 +326,7 @@ public abstract class SQLStorage extends Storage {
                     statement.setInt(5, Integer.parseInt(data[4])); // craftedHearts
                     statement.setInt(6, Integer.parseInt(data[5])); // craftedRevives
                     statement.setInt(7, Integer.parseInt(data[6])); // killedOtherPlayers
-                    statement.setLong(8, Long.parseLong(data[7])); // firstJoin
+                    statement.setLong(8, Long.parseLong(data[7])); // graceOffset
 
                     statement.addBatch();
                     batchSize++;

@@ -149,6 +149,8 @@ bossbarStyle: SOLID
 gracePeriod:
   # If a grace period should be enabled
   enabled: false
+  # If the grace period should count down while the player is offline
+  runOffline: true
   # The time in seconds, the grace period should last
   duration: 60
   # If the end of the grace period should be announced

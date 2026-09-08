@@ -45,9 +45,27 @@ public final class MySQLStorage extends MySQLSyntaxStorage {
                         + " AND COLUMN_NAME = 'firstJoin'"
                 )
         ) {
+            if (resultSet.next()) {
+                getPlugin().getLogger().info("Removing 'firstJoin' column from 'hearts' table.");
+                statement.executeUpdate("ALTER TABLE hearts DROP COLUMN firstJoin");
+            }
+        } catch (SQLException e) {
+            getPlugin().getLogger().log(Level.SEVERE, "Failed to migrate database: ", e);
+        }
+
+        try (
+                Connection connection = getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(
+                        "SELECT COLUMN_NAME"
+                        + " FROM INFORMATION_SCHEMA.COLUMNS"
+                        + " WHERE TABLE_NAME = 'hearts'"
+                        + " AND COLUMN_NAME = 'graceOffset'"
+                )
+        ) {
             if (!resultSet.next()) {
-                getPlugin().getLogger().info("Adding 'firstJoin' column to 'hearts' table.");
-                statement.executeUpdate("ALTER TABLE hearts ADD COLUMN firstJoin INTEGER DEFAULT 0");
+                getPlugin().getLogger().info("Adding 'graceOffset' column to 'hearts' table.");
+                statement.executeUpdate("ALTER TABLE hearts ADD COLUMN graceOffset BIGINT DEFAULT 0");
             }
         } catch (SQLException e) {
             getPlugin().getLogger().log(Level.SEVERE, "Failed to migrate database: ", e);

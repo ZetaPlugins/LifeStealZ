@@ -1,6 +1,7 @@
 package com.zetaplugins.lifestealz.commands.MainCommand.subcommands;
 
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.zetaplugins.lifestealz.LifeStealZ;
@@ -65,27 +66,33 @@ public final class DevSubCommand implements SubCommand {
             sender.sendMessage(MessageUtils.formatMsg(
                     "&7Is &c" + player.getName() + " &7in grace period? "
                             + gracePeriodColor + gracePeriodManager.isInGracePeriod(player)
-                            + (gracePeriodManager.isInGracePeriod(player) ? " &7(" + gracePeriodManager.getGracePeriodRemaining(player).orElse(-1) + "remaining)" : "")
+                            + (gracePeriodManager.isInGracePeriod(player) ? " &7(" + gracePeriodManager.getGracePeriodRemaining(player).orElse(0) + "s remaining)" : "")
                             + "\n&7Grace period enabled: " + gracePeriodEnabledColor + gracePeriodManager.isEnabled() + "&7"
             ));
         }
 
-        if (optionTwo.equals("setFirstJoinDate")) {
+        if (optionTwo.equals("setGraceOffset")) {
             if (args.length < 3 && !(sender instanceof Player)) {
-                throwUsageError(sender, "/lifestealz dev setFirstJoinDate [player]");
+                throwUsageError(sender, "/lifestealz dev setGraceOffset [player]");
                 return false;
             }
 
             Player player = args.length > 2 ? plugin.getServer().getPlayer(args[2]) : (Player) sender;
             if (player == null) {
-                throwUsageError(sender, "/lifestealz dev setFirstJoinDate [player]");
+                throwUsageError(sender, "/lifestealz dev setGraceOffset [player]");
                 return false;
             }
 
-            final long newFirstJoin = System.currentTimeMillis();
-
             PlayerData playerData = plugin.getStorage().load(player.getUniqueId());
-            playerData.setFirstJoin(newFirstJoin);
+
+            long elapsed;
+            if (plugin.getGracePeriodManager().getConfig().shouldRunOffline()) {
+                elapsed = (System.currentTimeMillis() - player.getFirstPlayed());
+            } else {
+                elapsed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50;
+            }
+            
+            playerData.setGraceOffset(elapsed);
             plugin.getStorage().save(playerData);
             plugin.getGracePeriodManager().startGracePeriod(player);
         }
@@ -133,7 +140,7 @@ public final class DevSubCommand implements SubCommand {
 
     @Override
     public String getUsage() {
-        return "/lifestealz dev <giveForbiddenitem | isInGracePeriod | setFirstJoinDate | refreshCaches | crash | cleardatabase | giveAnimationTotem | getEffectivePerms>";
+        return "/lifestealz dev <giveForbiddenitem | isInGracePeriod | setGraceOffset | refreshCaches | crash | cleardatabase | giveAnimationTotem | getEffectivePerms>";
     }
 
     @Override
