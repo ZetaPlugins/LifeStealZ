@@ -162,6 +162,8 @@ looseHeartsToNature: true
 looseHeartsToPlayer: true
 # Whether it should be announced, when a player got eliminated (has no more hearts)
 announceElimination: true
+# If hearts should not be dropped when a player dies at the minimum heart count
+noDropAfterMinHeart: false
 
 # Allows players to withdraw a heart, even if they only have one left
 allowDyingFromWithdraw: true
