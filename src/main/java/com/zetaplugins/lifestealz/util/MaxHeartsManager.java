@@ -17,21 +17,21 @@ public final class MaxHeartsManager {
      * @return the maximum number of hearts the player can have
      */
     public static double getMaxHearts(Player player, FileConfiguration config) {
-        final double configMaxHearts = config.getInt("maxHearts") * 2;
+        final int configMaxHearts = config.getInt("maxHearts");
 
-        int highestFound = -1;
+        int highestHeartLimit = -1;
 
         for (PermissionAttachmentInfo permInfo : player.getEffectivePermissions()) {
             String perm = permInfo.getPermission();
             if (perm.startsWith("lifestealz.maxhearts.")) {
                 try {
                     String numberPart = perm.substring("lifestealz.maxhearts.".length());
-                    int hearts = Integer.parseInt(numberPart) * 2;
-                    if (hearts > highestFound) highestFound = hearts;
+                    int hearts = Integer.parseInt(numberPart);
+                    if (hearts > highestHeartLimit) highestHeartLimit = hearts;
                 } catch (NumberFormatException ignored) {}
             }
         }
 
-        return highestFound == -1 ? configMaxHearts : highestFound;
+        return highestHeartLimit == -1 ? configMaxHearts : highestHeartLimit;
     }
 }

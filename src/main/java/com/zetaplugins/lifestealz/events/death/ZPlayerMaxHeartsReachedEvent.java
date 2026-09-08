@@ -13,7 +13,7 @@ public class ZPlayerMaxHeartsReachedEvent extends ZPlayerDeathEventBase {
     private final Player killer;
     
     @Getter
-    private final double maxHeartsLimit;
+    private final double maxHeartLimit;
     
     @Getter @Setter
     private boolean shouldDropHeartsInstead;
@@ -24,13 +24,13 @@ public class ZPlayerMaxHeartsReachedEvent extends ZPlayerDeathEventBase {
     public ZPlayerMaxHeartsReachedEvent(PlayerDeathEvent originalEvent, Player killer, double maxHearts) {
         super(originalEvent);
         this.killer = killer;
-        this.maxHeartsLimit = maxHearts;
+        this.maxHeartLimit = maxHearts;
         this.shouldDropHeartsInstead = false;
         this.maxHeartsMessage = MessageUtils.getAndFormatMsg(
                 false,
                 "maxHeartLimitReached",
                 "&cYou already reached the limit of %limit% hearts!",
-                new MessageUtils.Replaceable("%limit%", String.valueOf((int) (maxHearts / 2)))
+                new MessageUtils.Replaceable("%limit%", String.valueOf((int) maxHearts))
         );
     }
 }

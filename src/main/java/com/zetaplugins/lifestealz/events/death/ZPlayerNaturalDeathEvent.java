@@ -7,7 +7,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class ZPlayerNaturalDeathEvent extends ZPlayerDeathEventBase {
     @Getter @Setter
-    private double heartsToLose;
+    private double healthToLose;
 
     @Getter @Setter
     private boolean shouldDropHearts;
@@ -15,9 +15,9 @@ public class ZPlayerNaturalDeathEvent extends ZPlayerDeathEventBase {
     @Getter @Setter
     private String deathMessage;
 
-    public ZPlayerNaturalDeathEvent(PlayerDeathEvent originalEvent, double heartsToLose) {
+    public ZPlayerNaturalDeathEvent(PlayerDeathEvent originalEvent, double healthToLose) {
         super(originalEvent);
-        this.heartsToLose = heartsToLose;
+        this.healthToLose = healthToLose;
         this.shouldDropHearts = false;
         this.deathMessage = originalEvent.getDeathMessage();
     }

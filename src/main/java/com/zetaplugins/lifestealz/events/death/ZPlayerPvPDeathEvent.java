@@ -11,10 +11,10 @@ public class ZPlayerPvPDeathEvent extends ZPlayerDeathEventBase {
     private final Player killer;
     
     @Getter @Setter
-    private double heartsToLose;
+    private double healthToLose;
     
     @Getter @Setter
-    private double heartsKillerGains;
+    private double healthKillerGains;
     
     @Getter @Setter
     private boolean shouldDropHearts;
@@ -25,11 +25,11 @@ public class ZPlayerPvPDeathEvent extends ZPlayerDeathEventBase {
     @Getter @Setter
     private String deathMessage;
 
-    public ZPlayerPvPDeathEvent(PlayerDeathEvent originalEvent, Player killer, double heartsToLose, double heartsKillerGains) {
+    public ZPlayerPvPDeathEvent(PlayerDeathEvent originalEvent, Player killer, double healthToLose, double healthKillerGains) {
         super(originalEvent);
         this.killer = killer;
-        this.heartsToLose = heartsToLose;
-        this.heartsKillerGains = heartsKillerGains;
+        this.healthToLose = healthToLose;
+        this.healthKillerGains = healthKillerGains;
         this.shouldDropHearts = false;
         this.killerShouldGainHearts = true;
         this.deathMessage = originalEvent.getDeathMessage();

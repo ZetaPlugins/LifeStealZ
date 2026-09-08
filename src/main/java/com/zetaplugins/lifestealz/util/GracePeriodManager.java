@@ -195,7 +195,7 @@ public final class GracePeriodManager {
             return plugin.getConfig().getBoolean("gracePeriod.useHearts");
         }
 
-        public boolean looseHearts() {
+        public boolean loseHearts() {
             return plugin.getConfig().getBoolean("gracePeriod.looseHearts");
         }
 

@@ -46,7 +46,7 @@ public final class BypassManager {
             return plugin.getConfig().getBoolean("bypassPermission.useHearts", false);
         }
 
-        public boolean looseHearts() {
+        public boolean loseHearts() {
             return plugin.getConfig().getBoolean("bypassPermission.looseHearts", false);
         }
 

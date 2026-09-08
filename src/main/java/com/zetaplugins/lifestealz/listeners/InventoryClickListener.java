@@ -240,7 +240,7 @@ public final class InventoryClickListener implements Listener {
     }
 
     /**
-     * Modifes the data of the player being revived.
+     * Modifies the data of the player being revived.
      * @param data The PlayerData of the player being revived.
      */
     private void applyReviveData(PlayerData data) {

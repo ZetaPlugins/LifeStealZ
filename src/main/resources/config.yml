@@ -162,7 +162,7 @@ gracePeriod:
   damageToPlayers: false
   # Should a player be able to use hearts during the grace period
   useHearts: false
-  # Should a player be able to loose hearts during the grace period (if set to false, the killer will also not gain a heart)
+  # Should a player be able to lose hearts during the grace period (if set to false, the killer will also not gain a heart)
   looseHearts: false
   # Should a player be able to gain hearts during the grace period
   gainHearts: false
@@ -212,7 +212,7 @@ antiAlt:
   preventKill: false
   # If a message should be sent to the player, when an alt kill attempt is detected
   sendMessage: false
-  # Add custom comamnds, to be executed when a possible alt kill attempt is detected
+  # Add custom commands, to be executed when a possible alt kill attempt is detected
   # You can use &player& to insert the player name (commands are executed for both players)
   commands:
     # - "say Please don't kill alts"

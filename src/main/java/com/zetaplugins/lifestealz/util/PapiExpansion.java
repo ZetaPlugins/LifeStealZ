@@ -72,7 +72,7 @@ public final class PapiExpansion extends PlaceholderExpansion {
                 // Default to max hearts from config if player is not online
                 if (onlinePlayer == null) return String.valueOf(plugin.getConfig().getInt("maxHearts"));
 
-                return String.valueOf((int) (MaxHeartsManager.getMaxHearts(onlinePlayer, plugin.getConfig()) / 2));
+                return String.valueOf((int) MaxHeartsManager.getMaxHearts(onlinePlayer, plugin.getConfig()));
             }
             case "maxrevives": {
                 return String.valueOf(plugin.getConfig().getInt("maxRevives"));

@@ -71,9 +71,9 @@ public final class HeartsSubCommand implements SubCommand {
             return false;
         }
 
-        int amount = Integer.parseInt(args[3]);
+        int numHearts = Integer.parseInt(args[3]);
 
-        if (amount < 0) {
+        if (numHearts < 0) {
             throwUsageError(sender, getUsage());
             return false;
         }
@@ -95,7 +95,7 @@ public final class HeartsSubCommand implements SubCommand {
             assert targetPlayer != null;
             PlayerData targetPlayerData = plugin.getStorage().load(targetPlayer.getUniqueId());
 
-            double maxAllowedHearts = config.getInt("maxHearts") * 2;
+            double maxAllowedHearts = config.getInt("maxHearts");
             Player targetOnlinePlayer = targetPlayer.getPlayer();
             if (targetOnlinePlayer != null)
                 maxAllowedHearts = MaxHeartsManager.getMaxHearts(targetOnlinePlayer, config);
@@ -104,19 +104,19 @@ public final class HeartsSubCommand implements SubCommand {
                 case "add": {
                     if (
                             config.getBoolean("enforceMaxHeartsOnAdminCommands")
-                            && targetPlayerData.getMaxHealth() + (amount * 2) > maxAllowedHearts
+                            && targetPlayerData.getMaxHealth() / 2 + numHearts > maxAllowedHearts
                     ) {
                         sendHeartLimitReachedMessage(sender, maxAllowedHearts);
                         return false;
                     }
 
-                    targetPlayerData.setMaxHealth(targetPlayerData.getMaxHealth() + (amount * 2));
+                    targetPlayerData.setMaxHealth(targetPlayerData.getMaxHealth() + (numHearts * 2));
                     storage.save(targetPlayerData);
                     if (targetPlayer instanceof Player) LifeStealZ.setMaxHealth((Player) targetPlayer, targetPlayerData.getMaxHealth());
                     break;
                 }
                 case "set": {
-                    if (amount == 0) {
+                    if (numHearts == 0) {
                         sender.sendMessage(MessageUtils.getAndFormatMsg(
                                 false,
                                 "connotSetHeartsBelowOrToZero",
@@ -125,18 +125,18 @@ public final class HeartsSubCommand implements SubCommand {
                         return false;
                     }
 
-                    if (config.getBoolean("enforceMaxHeartsOnAdminCommands") && amount * 2 > maxAllowedHearts) {
+                    if (config.getBoolean("enforceMaxHeartsOnAdminCommands") && numHearts > maxAllowedHearts) {
                         sendHeartLimitReachedMessage(sender, maxAllowedHearts);
                         return false;
                     }
 
-                    targetPlayerData.setMaxHealth(amount * 2);
+                    targetPlayerData.setMaxHealth(numHearts * 2);
                     storage.save(targetPlayerData);
                     if (targetPlayer instanceof Player) LifeStealZ.setMaxHealth((Player) targetPlayer, targetPlayerData.getMaxHealth());
                     break;
                 }
                 case "remove": {
-                    if ((targetPlayerData.getMaxHealth() / 2) - (double) amount <= 0) {
+                    if ((targetPlayerData.getMaxHealth() / 2) - (double) numHearts <= 0) {
                         sender.sendMessage(MessageUtils.getAndFormatMsg(
                                 false,
                                 "connotSetHeartsBelowOrToZero",
@@ -145,7 +145,7 @@ public final class HeartsSubCommand implements SubCommand {
                         return false;
                     }
 
-                    targetPlayerData.setMaxHealth(targetPlayerData.getMaxHealth() - (amount * 2));
+                    targetPlayerData.setMaxHealth(targetPlayerData.getMaxHealth() - (numHearts * 2));
                     storage.save(targetPlayerData);
                     if (targetPlayer instanceof Player) LifeStealZ.setMaxHealth((Player) targetPlayer, targetPlayerData.getMaxHealth());
                     break;
@@ -153,7 +153,7 @@ public final class HeartsSubCommand implements SubCommand {
             }
         }
 
-        sendConfirmMessage(sender, optionTwo, targetPlayers, amount);
+        sendConfirmMessage(sender, optionTwo, targetPlayers, numHearts);
         return true;
     }
 
@@ -210,7 +210,7 @@ public final class HeartsSubCommand implements SubCommand {
                 true,
                 "maxHeartLimitReached",
                 "&cYou already reached the limit of %limit% hearts!",
-                new MessageUtils.Replaceable("%limit%", (int)(maxHearts / 2) + ""));
+                new MessageUtils.Replaceable("%limit%", (int) maxHearts + ""));
         sender.sendMessage(maxHeartsMsg);
     }
 

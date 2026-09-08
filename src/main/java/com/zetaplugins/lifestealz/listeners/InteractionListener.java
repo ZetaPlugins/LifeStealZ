@@ -80,7 +80,7 @@ public final class InteractionListener implements Listener {
     /**
      * Checks if the event should be cancelled when a player interacts with a respawn anchor
      * @param event PlayerInteractEvent
-     * @return wether the event needs to be cancelled
+     * @return whether the event needs to be cancelled
      */
     private boolean shouldCancelRespawnAnchorUsage(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || !plugin.getConfig().getBoolean("preventRespawnAnchors")) {
@@ -163,13 +163,13 @@ public final class InteractionListener implements Listener {
 
         Integer savedHeartAmountInteger = item.getItemMeta().getPersistentDataContainer().has(CustomItemManager.CUSTOM_HEART_VALUE_KEY, PersistentDataType.INTEGER) ? item.getItemMeta().getPersistentDataContainer().get(CustomItemManager.CUSTOM_HEART_VALUE_KEY, PersistentDataType.INTEGER) : 1;
         int savedHeartAmount = savedHeartAmountInteger != null ? savedHeartAmountInteger : 1;
-        double heartsToAdd = savedHeartAmount * 2;
-        double newHearts = playerData.getMaxHealth() + heartsToAdd;
+        double healthToAdd = savedHeartAmount * 2;
+        double newHealth = playerData.getMaxHealth() + healthToAdd;
 
         final double maxHearts = MaxHeartsManager.getMaxHearts(player, plugin.getConfig());
 
-        if (newHearts > maxHearts) {
-            player.sendMessage(MessageUtils.getAndFormatMsg(false, "maxHeartLimitReached", "&cYou already reached the limit of %limit% hearts!", new MessageUtils.Replaceable("%limit%", Integer.toString((int) maxHearts / 2))));
+        if (newHealth > maxHearts * 2) {
+            player.sendMessage(MessageUtils.getAndFormatMsg(false, "maxHeartLimitReached", "&cYou already reached the limit of %limit% hearts!", new MessageUtils.Replaceable("%limit%", Integer.toString((int) maxHearts))));
             return;
         }
 
@@ -189,10 +189,10 @@ public final class InteractionListener implements Listener {
             updateItemInHand(player, item, 40);
         }
 
-        playerData.setMaxHealth(newHearts);
+        playerData.setMaxHealth(newHealth);
         plugin.getStorage().save(playerData);
-        LifeStealZ.setMaxHealth(player, newHearts);
-        if (plugin.getConfig().getBoolean("healOnHeartUse")) player.setHealth(Math.min(player.getHealth() + heartsToAdd, newHearts));
+        LifeStealZ.setMaxHealth(player, newHealth);
+        if (plugin.getConfig().getBoolean("healOnHeartUse")) player.setHealth(Math.min(player.getHealth() + healthToAdd, newHealth));
 
         String customItemID = CustomItemManager.getCustomItemId(item);
         if (customItemID != null) {
